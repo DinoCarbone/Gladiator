@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb2ea092e9c3405ba579e477a9b0581, type: 3}
+  m_Name: PriorityBehaviors
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.PriorityBehaviorsSO
+  behaviorPriorities:
+  - {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}
+  - {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
