@@ -28,7 +28,7 @@ namespace Data.ScriptableObjects.Behaviors.Movement
 
         public override Type GetBehaviorType()
         {
-            return typeof(CharacterControllerMovementState);
+            return typeof(BaseMovement);
         }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace Core.Behaviors.States.Movement
 {
@@ -12,6 +11,7 @@ namespace Core.Behaviors.States.Movement
 
         public CharacterControllerMovementState(CharacterController controller, List<Type> incompatibleStates, float startSpeed = 5f) : base(incompatibleStates)
         {
+            Debug.Log("CharacterControllerMovementState Create");
             speed = startSpeed;
             this.controller = Utils.Extensions.AssignWithNullCheck(controller);
         }

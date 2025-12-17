@@ -670,7 +670,7 @@ MonoBehaviour:
   - behaviorSO: {fileID: 11400000, guid: cd3a0ac05857a4440a1e4ce54a04710a, type: 2}
     contexts: []
     isDefaultState: 1
-  providerSOs:
+  providersSO:
   - {fileID: 11400000, guid: a1595b2d4a3ee4c82acb35c1dad9f5d1, type: 2}
 --- !u!4 &1137770731
 Transform:
