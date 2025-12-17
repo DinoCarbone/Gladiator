@@ -27,5 +27,8 @@ namespace Core.Services.States
     public interface IIncompatibleStates : IState
     {
         IReadOnlyList<Type> IncompatibleStates { get; }
-    } 
+    }
+    public delegate void StateActionDelegate(IState state);
+    public delegate bool StateConditionDelegate(IState state);
+    public delegate IReadOnlyList<Type> StateIncompatibleDelegate(IState state);
 }
