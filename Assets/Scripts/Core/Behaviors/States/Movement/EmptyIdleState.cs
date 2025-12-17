@@ -15,14 +15,19 @@ namespace Core.Behaviors.States.Movement
 
         public bool CanExit => false;
 
+        public event Action OnEnter;
+        public event Action OnExit;
+
         public void Enter()
         {
             Debug.Log("EmptyIdleState Enter");
+            OnEnter?.Invoke();
         }
 
         public void Exit()
         {
             Debug.Log("EmptyIdleState Exit");
+            OnExit?.Invoke();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Data.ScriptableObjects.Behaviors.Movement
             return new CharacterControllerMovementState(controller ,GetIncompatibleTypes(), moveSpeed);
         }
 
-        public override Type GetBehaviorType()
+        public override Type GetBaseBehaviorType()
         {
             return typeof(BaseMovement);
         }

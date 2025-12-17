@@ -9,6 +9,6 @@ namespace Data.ScriptableObjects.Behaviors
      {
           public abstract IState CreateConfigState(List<GameObject> contexts);
 
-          public abstract Type GetBehaviorType();
+          public abstract Type GetBaseBehaviorType();
      }
 }

@@ -7,9 +7,12 @@ using Zenject;
 
 namespace Core.Behaviors.States.Movement
 {
-    public abstract class BaseAxisMovement : BaseMovement, IUpdateState, IEnterable, IExitable
+    public abstract class BaseAxisMovement : BaseMovement, IUpdateState, IEnterState, IExitState
     {
         protected IAxisProvider inputAxisProvider;
+
+        public event Action OnEnter;
+        public event Action OnExit;
 
         public bool CanEnter => inputAxisProvider.Axis != Vector2.zero;
 
@@ -32,5 +35,15 @@ namespace Core.Behaviors.States.Movement
             OnMove(inputAxisProvider.Axis);
         }
         protected abstract void OnMove(Vector2 axis);
+
+        public void Enter()
+        {
+            OnEnter?.Invoke();
+        }
+
+        public void Exit()
+        {
+            OnExit?.Invoke();
+        }
     }
 }

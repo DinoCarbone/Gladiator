@@ -19,7 +19,7 @@ namespace Data.ScriptableObjects.Behaviors
 
             for (int i = 0; i < behaviorPriorities.Count; i++)
             {
-                var behaviorType = behaviorPriorities[i].GetBehaviorType();
+                var behaviorType = behaviorPriorities[i].GetBaseBehaviorType();
                 priorityDict[behaviorType] = i;
             }
 

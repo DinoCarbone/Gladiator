@@ -14,7 +14,7 @@ namespace Data.ScriptableObjects.Behaviors
             List<Type> types = new List<Type>();
             foreach (var state in incompatibleStates)
             {
-                Type type = state.GetBehaviorType();
+                Type type = state.GetBaseBehaviorType();
                 if(type == null || types.Contains(type))
                     continue;
                 types.Add(type);

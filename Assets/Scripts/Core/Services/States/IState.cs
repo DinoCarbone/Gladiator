@@ -11,10 +11,12 @@ namespace Core.Services.States
     public interface IExitable : IState
     {
         bool CanExit { get; }
+        event Action OnExit;
     }
     public interface IEnterable : IState
     {
         bool CanEnter { get; }
+        event Action OnEnter;
     }
     public interface IEnterState : IEnterable
     {

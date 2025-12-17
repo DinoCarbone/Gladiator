@@ -14,7 +14,7 @@ namespace Data.ScriptableObjects.Behaviors.Movement
             return new EmptyIdleState(GetIncompatibleTypes());
         }
 
-        public override Type GetBehaviorType()
+        public override Type GetBaseBehaviorType()
         {
             return typeof(BaseIdle);
         }

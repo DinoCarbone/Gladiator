@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using Core.Services;
 using Core.Services.DI;
 using Core.Services.States;
 using Data.ScriptableObjects.Behaviors;
-using Data.ScriptableObjects.Providers; 
 using Data.Serialization;
 using UnityEngine;
 using Zenject;
+using Utils;
 
 namespace Core.Behaviors.Entities
 {
@@ -14,7 +13,7 @@ namespace Core.Behaviors.Entities
     {
         [SerializeField] private PriorityBehaviorsSO priorityBehaviorsSO;
         [SerializeField] private List<EntityDataPart> entityDatas = new List<EntityDataPart>();
-        [SerializeField] private List<BaseProviderSO> providersSO = new List<BaseProviderSO>();
+        [SerializeField] private List<ProviderDataPart> providersSO = new List<ProviderDataPart>();
         private List<IState> entityStates;
         private List<Providers.IProvider> providers;
         private StateMachine stateMachine;
@@ -34,24 +33,24 @@ namespace Core.Behaviors.Entities
             foreach (EntityDataPart dataPart in entityDatas)
             {
                 IState state = dataPart.behaviorSO.CreateConfigState(dataPart.contexts);
-                entityStates.Add(state);
+
+                if(!Extensions.ContainsType(entityStates, state)) entityStates.Add(state);
+                else Debug.LogError("Behavior type already exists");
 
                 if (dataPart.isDefaultState) defaultStates.Add(state);
             }
-            Utils.Extensions.AssignWithNullCheck(priorityBehaviorsSO);
-            foreach (var i in priorityBehaviorsSO.GetPriorityTypes())
-            {
-                print(i.Key + " " + i.Value);
-            }
+            Extensions.AssignWithNullCheck(priorityBehaviorsSO);
             stateMachine = new StateMachine(entityStates, defaultStates, priorityBehaviorsSO.GetPriorityTypes());
         }
         private void InitializeProviders()
         {
             providers = new List<Providers.IProvider>();
-            foreach (BaseProviderSO providerSO in providersSO)
+            foreach (ProviderDataPart providerData in providersSO)
             {
-                Providers.IProvider provider = providerSO.CreateProvider();
-                providers.Add(provider);
+                Providers.IProvider provider = providerData.providerSO.CreateProvider(providerData.contexts);
+
+                if(!Extensions.ContainsType(providers, provider)) providers.Add(provider);
+                else Debug.LogError("Provider type already exists");
             }
         }
         private void InjectServices(IHybridInjectService hybridInjectService)

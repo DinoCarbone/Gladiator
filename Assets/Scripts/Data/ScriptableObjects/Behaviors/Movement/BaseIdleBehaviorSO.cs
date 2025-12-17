@@ -17,7 +17,7 @@ namespace Data.ScriptableObjects.Behaviors.Movement
             return new BaseIdle(null);
         }
 
-        public override Type GetBehaviorType()
+        public override Type GetBaseBehaviorType()
         {
             return typeof(BaseIdle);
         }

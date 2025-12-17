@@ -169,7 +169,6 @@ namespace Core.Services.States
             {
                 currentStates.Remove(state);
             }
-            if(statesToRemove.Count > 0) statesToRemove.Clear();
 
             foreach (var state in statesToAdd)
             {
@@ -178,7 +177,6 @@ namespace Core.Services.States
                     currentStates.Add(state);
                 }
             }
-            if(statesToAdd.Count > 0) statesToAdd.Clear();
         }
     }
 }

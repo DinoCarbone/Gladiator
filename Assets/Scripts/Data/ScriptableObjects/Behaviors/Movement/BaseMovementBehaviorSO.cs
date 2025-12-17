@@ -17,7 +17,7 @@ namespace Data.ScriptableObjects.Behaviors.Movement
             return new BaseMovement(null);
         }
 
-        public override Type GetBehaviorType()
+        public override Type GetBaseBehaviorType()
         {
             return typeof(BaseMovement);
         }

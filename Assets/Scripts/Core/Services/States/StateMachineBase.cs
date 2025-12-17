@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Core.Services.States
@@ -25,11 +24,8 @@ namespace Core.Services.States
             allStates = initialStateList ?? throw new ArgumentNullException(nameof(initialStateList));
             idleStates = idleStateList ?? throw new ArgumentNullException(nameof(idleStateList));
             statePriorities = priorities ?? new Dictionary<Type, int>();
-            Debug.Log(statePriorities.Count());
             if (allStates.Count == 0 || idleStates.Count == 0)
                 throw new ArgumentException("Must have at least one state and one idle state");
-
-            currentStates = new List<IState>(idleStates);
 
             RegisterStandardHandlers();
         }
