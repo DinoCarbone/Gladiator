@@ -13,9 +13,17 @@ namespace Data.ScriptableObjects.Behaviors
     {
         [SerializeField] private List<BaseBehaviorSO> behaviorPriorities;
 
-        public IReadOnlyList<Type> GetPriorityTypes()
+        public Dictionary<Type, int> GetPriorityTypes()
         {
-            return behaviorPriorities.Select(b => b.GetBehaviorType()).ToList();
+            var priorityDict = new Dictionary<Type, int>();
+
+            for (int i = 0; i < behaviorPriorities.Count; i++)
+            {
+                var behaviorType = behaviorPriorities[i].GetBehaviorType();
+                priorityDict[behaviorType] = i;
+            }
+
+            return priorityDict;
         }
     }
 }

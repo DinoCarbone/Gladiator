@@ -14,7 +14,7 @@ namespace Core.Behaviors.Entities
     {
         [SerializeField] private PriorityBehaviorsSO priorityBehaviorsSO;
         [SerializeField] private List<EntityDataPart> entityDatas = new List<EntityDataPart>();
-        [SerializeField] private List<BaseProviderSO> providerSOs = new List<BaseProviderSO>();
+        [SerializeField] private List<BaseProviderSO> providersSO = new List<BaseProviderSO>();
         private List<IState> entityStates;
         private List<Providers.IProvider> providers;
         private StateMachine stateMachine;
@@ -39,12 +39,16 @@ namespace Core.Behaviors.Entities
                 if (dataPart.isDefaultState) defaultStates.Add(state);
             }
             Utils.Extensions.AssignWithNullCheck(priorityBehaviorsSO);
+            foreach (var i in priorityBehaviorsSO.GetPriorityTypes())
+            {
+                print(i.Key + " " + i.Value);
+            }
             stateMachine = new StateMachine(entityStates, defaultStates, priorityBehaviorsSO.GetPriorityTypes());
         }
         private void InitializeProviders()
         {
             providers = new List<Providers.IProvider>();
-            foreach (BaseProviderSO providerSO in providerSOs)
+            foreach (BaseProviderSO providerSO in providersSO)
             {
                 Providers.IProvider provider = providerSO.CreateProvider();
                 providers.Add(provider);
