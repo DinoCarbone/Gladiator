@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Utils
@@ -32,6 +33,30 @@ namespace Utils
 
             Type targetType = typeInstance.GetType();
             return collection.Any(item => targetType.IsInstanceOfType(item));
+        }
+        public static AnimationStateTypeData FindCompatibleBehaviorType(
+    object obj,
+    List<AnimationStateTypeData> animationStates)
+        {
+            if (obj == null || animationStates == null)
+                return null;
+
+            Type objType = obj.GetType();
+
+            foreach (var stateData in animationStates)
+            {
+                if (stateData.BehaviorType != null)
+                {
+                    // Проверяем оба направления совместимости
+                    if (stateData.BehaviorType.IsAssignableFrom(objType) ||
+                        objType.IsAssignableFrom(stateData.BehaviorType))
+                    {
+                        return stateData; // Возвращаем найденный AnimationStateTypeData
+                    }
+                }
+            }
+
+            return null; // Ничего не нашли
         }
 
     }

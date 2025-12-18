@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.Services.States;
 using Data.ScriptableObjects.Behaviors;
 using Data.ScriptableObjects.Providers;
 using UnityEngine;
@@ -18,5 +19,13 @@ namespace Data.Serialization
     {
         public BaseProviderSO providerSO;
         public List<GameObject> contexts;
+    }
+    public class StateListData
+    {
+        public readonly IReadOnlyList<IState> States;
+        public StateListData(List<IState> states)
+        {
+            States = new List<IState>(states);
+        }
     }
 }

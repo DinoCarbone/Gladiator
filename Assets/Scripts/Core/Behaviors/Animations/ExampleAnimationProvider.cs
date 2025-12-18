@@ -1,50 +1,100 @@
 using System;
-using Core.Behaviors.States.Movement;
+using System.Collections.Generic;
+using Data.Serialization;
 using UnityEngine;
 using Zenject;
+using Utils;
+using Core.Services.States;
 
 namespace Core.Behaviors.Animations
 {
     public class ExampleAnimationProvider : Providers.IProvider, IDisposable
     {
-        private EmptyIdleState idleState;
-        private BaseAxisMovement movementState;
-        private AnimationClip idleAimation;
-        private AnimationClip moveAimation;
-
+        private List<AnimationStateTypeData> templateAnimationStates = new List<AnimationStateTypeData>();
+        private readonly List<AnimationStateEnterData> animationStates = new List<AnimationStateEnterData>();
         private readonly BaseAnimatorService animatorService;
-        public ExampleAnimationProvider(Animator animator, AnimationClip idleAimation, AnimationClip moveAimation)
+        private readonly Dictionary<AnimationStateEnterData, Action> enterHandlers = new();
+
+        public ExampleAnimationProvider(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
         {
             animatorService = new BaseAnimatorService(animator);
-            this.idleAimation = idleAimation;
-            this.moveAimation = moveAimation;
-            Debug.Log("ExampleAnimationProvider Created");
+            this.templateAnimationStates = Extensions.AssignWithNullCheck(templateAnimationStates);
         }
+
         [Inject]
-        private void Construct(EmptyIdleState idleState, BaseAxisMovement movementState)
+        private void Construct(StateListData animationStates)
         {
-            Debug.Log("ExampleAnimationProvider Constructed");
-            this.idleState = idleState;
-            this.movementState = movementState;
-            this.idleState.OnEnter += OnEnterIdleState;
-            this.movementState.OnEnter += OnEnterMovementState;
+            CreateAnimationStates(animationStates.States);
+            Subscribe();
         }
 
-        private void OnEnterMovementState()
+        private void CreateAnimationStates(IReadOnlyList<IState> states)
         {
-            animatorService.Play("Move",moveAimation);
+            animationStates.Clear();
+            enterHandlers.Clear();
+
+            foreach (var state in states)
+            {
+                if (state == null)
+                {
+                    Debug.LogError("State is null");
+                    continue;
+                }
+
+                AnimationStateTypeData stateTypeData = Extensions.FindCompatibleBehaviorType(state, templateAnimationStates);
+                if (stateTypeData != null)
+                {
+                    if (string.IsNullOrEmpty(stateTypeData.StateName))
+                    {
+                        Debug.LogError("StateName is null or empty");
+                        continue;
+                    }
+
+                    if (state is IEnterable enterable)
+                    {
+                        AnimationStateEnterData animationEnterData = new AnimationStateEnterData(stateTypeData, enterable);
+                        animationStates.Add(animationEnterData);
+                    }
+                    else Debug.LogError("State doesn't implement IEnterable");
+                }
+            }
         }
 
-        private void OnEnterIdleState()
+        private void Subscribe()
         {
-            animatorService.Play("Idle",idleAimation);
+            foreach (var state in animationStates)
+            {
+                Action enterHandler = () => OnEnterState(state);
+                state.EnterState.OnEnter += enterHandler;
+                enterHandlers[state] = enterHandler;
+            }
+        }
+
+        private void Unsubscribe()
+        {
+            foreach (var kvp in enterHandlers)
+            {
+                AnimationStateEnterData state = kvp.Key;
+                Action handler = kvp.Value;
+
+                state.EnterState.OnEnter -= handler;
+            }
+
+            enterHandlers.Clear();
+        }
+        
+        private void OnEnterState(AnimationStateEnterData enterData)
+        {
+            Debug.Log(enterData.StateName);
+            animatorService.Play(enterData.StateName, enterData.Clip, enterData.BlendTime);
         }
 
         public void Dispose()
         {
-            idleState.OnEnter -= OnEnterIdleState;
-            movementState.OnEnter -= OnEnterMovementState;
-            Debug.Log("ExampleAnimationProvider Disposed");
+            Unsubscribe();
+            animationStates.Clear();
+            templateAnimationStates.Clear();
+            templateAnimationStates = null;
         }
     }
 }

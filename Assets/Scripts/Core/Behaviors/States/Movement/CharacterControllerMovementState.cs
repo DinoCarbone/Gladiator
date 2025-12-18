@@ -11,14 +11,22 @@ namespace Core.Behaviors.States.Movement
 
         public CharacterControllerMovementState(CharacterController controller, List<Type> incompatibleStates, float startSpeed = 5f) : base(incompatibleStates)
         {
-            Debug.Log("CharacterControllerMovementState Create");
             speed = startSpeed;
             this.controller = Utils.Extensions.AssignWithNullCheck(controller);
         }
         protected override void OnMove(Vector2 axis)
         {
-            Vector3 move = new Vector3(axis.x, 0, axis.y);
-            controller.Move(move * speed * Time.deltaTime);
+            // Движение вперед/назад относительно вращения
+            Vector3 move = controller.transform.forward * axis.y +
+                           controller.transform.right * axis.x;
+
+            move.y = 0; // Убираем вертикальную составляющую
+
+            if (move.magnitude > 0.1f)
+            {
+                move.Normalize();
+                controller.Move(move * speed * Time.deltaTime);
+            }
         }
     }
 }

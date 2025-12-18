@@ -1,0 +1,78 @@
+using System.Collections.Generic;
+using Data.Serialization;
+using UnityEngine;
+
+namespace Data.ScriptableObjects.Providers
+{
+    [CreateAssetMenu(fileName = "OverrideAnimationProviderSO", menuName = "ScriptableObjects/Providers/Animations/OverrideAnimationProviderSO")]
+    public class OverrideAnimationProviderSO : AnimationProviderSOBase
+    {
+        [SerializeField] private AnimationProviderSOBase animationProviderSO;
+        [SerializeField] private List<AnimationSerializeClipData> clipDatas;
+
+        public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()
+        {
+            // Получаем базовые состояния из оригинального провайдера
+            List<AnimationStateTypeData> baseStates = animationProviderSO.GetAnimationStateTypeDatas();
+            List<AnimationStateTypeData> result = new List<AnimationStateTypeData>();
+
+            foreach (var clipData in clipDatas)
+            {
+                if (clipData.animationStateSO == null)
+                {
+                    Debug.LogError("AnimationStateSO is null in clipDatas");
+                    continue;
+                }
+
+                bool found = false;
+
+                for (int i = 0; i < baseStates.Count; i++)
+                {
+                    var baseState = baseStates[i];
+
+                    if (baseState.StateName == clipData.animationStateSO.StateName)
+                    {
+                        found = true;
+
+                        var overriddenState = new AnimationStateTypeData(
+                            clipData.animationStateSO.StateName,
+                            clipData.clip,
+                            baseState.BehaviorType,
+                            clipData.blendTime
+                        );
+
+                        result.Add(overriddenState);
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    Debug.LogError($"AnimationStateSO with StateName '{clipData.animationStateSO.StateName}' not found in base animation provider states");
+                }
+            }
+
+            foreach (var baseState in baseStates)
+            {
+                bool isOverridden = false;
+
+                foreach (var clipData in clipDatas)
+                {
+                    if (clipData.animationStateSO != null &&
+                        clipData.animationStateSO.StateName == baseState.StateName)
+                    {
+                        isOverridden = true;
+                        break;
+                    }
+                }
+
+                if (!isOverridden)
+                {
+                    result.Add(baseState);
+                }
+            }
+
+            return result;
+        }
+    }
+}

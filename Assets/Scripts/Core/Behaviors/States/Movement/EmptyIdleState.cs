@@ -20,13 +20,11 @@ namespace Core.Behaviors.States.Movement
 
         public void Enter()
         {
-            Debug.Log("EmptyIdleState Enter");
             OnEnter?.Invoke();
         }
 
         public void Exit()
         {
-            Debug.Log("EmptyIdleState Exit");
             OnExit?.Invoke();
         }
     }

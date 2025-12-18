@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Core.Behaviors.Animations
@@ -16,48 +15,46 @@ namespace Core.Behaviors.Animations
 
         public void Play(string stateName, AnimationClip clip, float blendTime = 0.2f)
         {
-            if (clip == null || string.IsNullOrEmpty(stateName))
+            if (string.IsNullOrEmpty(stateName))
             {
-                Debug.LogError("Clip или stateName не могут быть null!");
+                Debug.LogError("StateName не могут быть null!");
                 return;
             }
 
-            // Проверяем, не пытаемся ли воспроизвести ту же анимацию в том же состоянии
-            if (clip == currentClip && stateName == currentStateName)
-                return;
 
-            // Устанавливаем клип в нужное состояние через AnimatorOverrideController
             SetClipForState(stateName, clip);
+            if (clip == currentClip && stateName == currentStateName)
+            {
+                animator.Play(stateName);
+                return;
+            }
 
-            // Плавно переключаемся на состояние
             animator.CrossFade(stateName, blendTime);
 
-            // Сохраняем текущие значения
             currentClip = clip;
             currentStateName = stateName;
         }
 
         private void SetClipForState(string stateName, AnimationClip clip)
         {
-            // Получаем или создаем AnimatorOverrideController
+            if(clip == null)
+            {
+                return;
+            }
             AnimatorOverrideController overrideController = GetOrCreateOverrideController();
 
-            // Устанавливаем клип для указанного состояния
             overrideController[stateName] = clip;
         }
 
         private AnimatorOverrideController GetOrCreateOverrideController()
         {
-            // Если уже есть OverrideController - используем его
             if (animator.runtimeAnimatorController is AnimatorOverrideController existingOverride)
             {
                 return existingOverride;
             }
 
-            // Создаем новый OverrideController на основе текущего контроллера
             var overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
             animator.runtimeAnimatorController = overrideController;
-
             return overrideController;
         }
 

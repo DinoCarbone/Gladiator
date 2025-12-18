@@ -6,6 +6,8 @@ using Data.Serialization;
 using UnityEngine;
 using Zenject;
 using Utils;
+using Core.Providers;
+using System;
 
 namespace Core.Behaviors.Entities
 {
@@ -24,7 +26,26 @@ namespace Core.Behaviors.Entities
             InitializeStates();
             InitializeProviders();
             InjectServices(hybridInjectService);
-            print("Entity initialized");
+        }
+        void OnDestroy()
+        {
+            if (entityStates != null)
+            {
+                foreach (IState state in entityStates)
+                {
+                    if (state is IDisposable disposable) disposable.Dispose();
+                }
+            }
+            if (providers != null)
+            {
+                foreach (Providers.IProvider provider in providers)
+                {
+                    if (provider is IDisposable disposable) disposable.Dispose();
+                }
+            }
+            stateMachine = null;
+            entityStates = null;
+            providers = null;
         }
         private void InitializeStates()
         {
@@ -41,6 +62,7 @@ namespace Core.Behaviors.Entities
             }
             Extensions.AssignWithNullCheck(priorityBehaviorsSO);
             stateMachine = new StateMachine(entityStates, defaultStates, priorityBehaviorsSO.GetPriorityTypes());
+
         }
         private void InitializeProviders()
         {
@@ -58,6 +80,9 @@ namespace Core.Behaviors.Entities
             List<object> statesAsObjects = new List<object>(entityStates);
             statesAsObjects.AddRange(providers);
 
+            StateListData stateListData = new StateListData(entityStates);
+            statesAsObjects.Add(stateListData);
+            
             hybridInjectService.InjectAll(statesAsObjects);
         }
         void Update()

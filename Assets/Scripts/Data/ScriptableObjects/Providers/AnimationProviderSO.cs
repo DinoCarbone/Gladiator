@@ -1,30 +1,46 @@
-using System;
 using System.Collections.Generic;
-using Core.Behaviors.Animations;
-using Core.Providers;
+using Data.ScriptableObjects.Animatios;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers
 {
-     [CreateAssetMenu(fileName = "AnimationProviderSO", menuName = "ScriptableObjects/Providers/AnimationProviderSO")]
-    public class AnimationProviderSO : BaseProviderSO
+     [CreateAssetMenu(fileName = "AnimationProviderSO",
+      menuName = "ScriptableObjects/Providers/Animations/AnimationProviderSO")]
+    public class AnimationProviderSO : AnimationProviderSOBase
     {
-        public AnimationClip idle;
-        public AnimationClip move;
-
-        public override IProvider CreateProvider(List<GameObject> contexts)
+        [SerializeField] private List<AnimationSerializeTypeData> animationSerializeTypeDatas;
+        public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()
         {
-            Animator animator = null;
-
-            foreach (GameObject context in contexts)
+            List<AnimationStateTypeData> stateTypeDatas = new List<AnimationStateTypeData>();
+            foreach (AnimationSerializeTypeData data in animationSerializeTypeDatas)
             {
-                if (context.TryGetComponent(out animator)) 
-                break;
+                if(data.animationStateSO == null || string.IsNullOrEmpty(data.animationStateSO.StateName))
+                {
+                    Debug.LogError("AnimationStateSO.StateName is null or empty");
+                    continue;
+                }
+                else if (data.behaviorTypeSO == null)
+                {
+                    Debug.LogError("BehaviorTypeSO is null");
+                    continue;
+                }
+                stateTypeDatas.Add(new AnimationStateTypeData(data.animationStateSO.StateName, null,
+                 data.behaviorTypeSO.GetBaseBehaviorType(), data.blendTime));
             }
-            if(animator == null)
-            throw new Exception($"AnimationProviderSO: Не удалось найти компонент  Animator в контекстах для создания провайдера {nameof(ExampleAnimationProvider)}.");
+            return stateTypeDatas;
+        }
 
-            return new ExampleAnimationProvider(animator, idle, move);
+        internal AnimationStateSO GetAnimationStateSO(string stateName)
+        {
+            foreach (AnimationSerializeTypeData data in animationSerializeTypeDatas)
+            {
+                if (data.animationStateSO != null && data.animationStateSO.StateName == stateName)
+                {
+                    return data.animationStateSO;
+                }
+            }
+            return null;
         }
     }
 }

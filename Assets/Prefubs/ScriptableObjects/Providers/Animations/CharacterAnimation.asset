@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c28295833d684228b2bcbcf614fe8ba, type: 3}
+  m_Name: CharacterAnimation
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.AnimationProviderSO
+  animationSerializeTypeDatas:
+  - blendTime: 0.4
+    animationStateSO: {fileID: 11400000, guid: dad08f00a8df7496eb476610e30ae16e, type: 2}
+    behaviorTypeSO: {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
+  - blendTime: 0.01
+    animationStateSO: {fileID: 11400000, guid: 144775e1fb03d44adae04a873255ae5c, type: 2}
+    behaviorTypeSO: {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}

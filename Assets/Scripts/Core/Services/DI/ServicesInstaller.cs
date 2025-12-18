@@ -1,4 +1,6 @@
+using Core.Providers;
 using Core.Services.Input;
+using UnityEngine;
 using Zenject;
 
 namespace Core.Services.DI
@@ -12,6 +14,10 @@ namespace Core.Services.DI
                  .AsSingle();
                  
             Container.BindInterfacesAndSelfTo<DesktopInput>().AsSingle();
+            
+            Container.Bind<ICameraProvider>()
+                 .To<CameraProvider>().FromInstance(new CameraProvider(Camera.main))
+                 .AsSingle();
         }
     }
 }
