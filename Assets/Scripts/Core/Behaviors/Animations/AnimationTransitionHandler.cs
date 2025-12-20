@@ -8,29 +8,31 @@ using Core.Services.States;
 
 namespace Core.Behaviors.Animations
 {
-    public class BaseAnimationProvider : Providers.IProvider, IDisposable
+    public class AnimationTransitionHandler : Providers.IProvider, IDisposable
     {
-        private List<AnimationStateTypeData> templateAnimationStates = new List<AnimationStateTypeData>();
-        private readonly List<AnimationStateEnterData> animationStates = new List<AnimationStateEnterData>();
-        private readonly BaseAnimatorService animatorService;
+        private List<AnimationStateTypeData> templateStates = new List<AnimationStateTypeData>();
+        private readonly List<AnimationStateEnterData> states = new List<AnimationStateEnterData>();
+        private IAnimationPlayService animatorService;
         private readonly Dictionary<AnimationStateEnterData, Action> enterHandlers = new();
+        protected readonly Animator animator;
 
-        public BaseAnimationProvider(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
+        public AnimationTransitionHandler(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
         {
-            animatorService = new BaseAnimatorService(animator);
-            this.templateAnimationStates = Extensions.AssignWithNullCheck(templateAnimationStates);
+            this.animator = Extensions.AssignWithNullCheck(animator);
+            this.templateStates = Extensions.AssignWithNullCheck(templateAnimationStates);
         }
 
         [Inject]
-        public void Construct(StateListData animationStates)
+        public void Construct(StateListData animationStates, IAnimationPlayServiceFactory animationServicesFactory)
         {
+            animatorService = Extensions.AssignWithNullCheck(animationServicesFactory.Create(animator));
             CreateAnimationStates(animationStates.States);
             Subscribe();
         }
 
         private void CreateAnimationStates(IReadOnlyList<IState> states)
         {
-            animationStates.Clear();
+            this.states.Clear();
             enterHandlers.Clear();
 
             foreach (var state in states)
@@ -41,7 +43,7 @@ namespace Core.Behaviors.Animations
                     continue;
                 }
 
-                AnimationStateTypeData stateTypeData = Extensions.FindCompatibleBehaviorType(state, templateAnimationStates);
+                AnimationStateTypeData stateTypeData = Extensions.FindCompatibleBehaviorType(state, templateStates);
                 if (stateTypeData != null)
                 {
                     if (string.IsNullOrEmpty(stateTypeData.StateName))
@@ -53,16 +55,16 @@ namespace Core.Behaviors.Animations
                     if (state is IEnterable enterable)
                     {
                         AnimationStateEnterData animationEnterData = new AnimationStateEnterData(stateTypeData, enterable);
-                        animationStates.Add(animationEnterData);
+                        this.states.Add(animationEnterData);
                     }
                     else Debug.LogError("State doesn't implement IEnterable");
                 }
             }
         }
 
-        private void Subscribe()
+        protected virtual void Subscribe()
         {
-            foreach (var state in animationStates)
+            foreach (var state in states)
             {
                 Action enterHandler = () => OnEnterState(state);
                 state.EnterState.OnEnter += enterHandler;
@@ -70,7 +72,7 @@ namespace Core.Behaviors.Animations
             }
         }
 
-        private void Unsubscribe()
+        protected virtual void Unsubscribe()
         {
             foreach (var kvp in enterHandlers)
             {
@@ -85,15 +87,25 @@ namespace Core.Behaviors.Animations
         
         protected virtual void OnEnterState(AnimationStateEnterData enterData)
         {
-            animatorService.Play(enterData.StateName, enterData.Clip, enterData.BlendTime);
+            float blendTime = enterData.BlendTime;
+            if(enterData.OverrideBlendTimes?.Count > 0)
+            {
+                string currentStateName = animatorService.GetCurrentAnimationName();
+                if( !string.IsNullOrEmpty(currentStateName) && 
+                enterData.OverrideBlendTimes.TryGetValue(currentStateName, out blendTime))
+                Debug.Log($"Overriding blendTime for {enterData.StateName} to {blendTime}");
+                else blendTime = enterData.BlendTime;
+            }
+
+            animatorService.Play(enterData.StateName, enterData.Clip, blendTime);
         }
 
         public virtual void Dispose()
         {
             Unsubscribe();
-            animationStates.Clear();
-            templateAnimationStates.Clear();
-            templateAnimationStates = null;
+            states.Clear();
+            templateStates.Clear();
+            templateStates = null;
         }
     }
 }

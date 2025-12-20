@@ -1,3 +1,4 @@
+using Core.Behaviors.Animations;
 using Core.Providers;
 using Core.Services.Input;
 using UnityEngine;
@@ -21,8 +22,16 @@ namespace Core.Services.DI
 
             Container.BindInterfacesAndSelfTo<TickableService>().AsSingle(); 
 
+            BindAnimationFactories();
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+        private void BindAnimationFactories()
+        {
+            Container.BindInterfacesAndSelfTo<AnimationPlayServiceFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<AnimationEndNotifierFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<AnimationEventsNotifierFactory>().AsSingle();
         }
 
     }

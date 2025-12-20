@@ -35,13 +35,13 @@ namespace Core.Services.States
                 ProcessNewStates();
                 EnsureActiveStates();
                 ApplyPendingChanges();
-                exitingStates.Clear();
             }
             finally
             {
                 isProcessing = false;
                 statesToAdd.Clear();
                 statesToRemove.Clear();
+                exitingStates.Clear();
             }
         }
 
@@ -99,8 +99,8 @@ namespace Core.Services.States
                 cachedTempList.Add(state);
             }
 
-            // Сортируем по приоритету (высший приоритет первый)
-            cachedTempList.Sort((a, b) => GetPriority(b.GetType()).CompareTo(GetPriority(a.GetType())));
+            // Сортируем по приоритету (высший по списку последний)
+            cachedTempList.Sort((b, a) => GetPriority(b.GetType()).CompareTo(GetPriority(a.GetType())));
 
             // Обрабатываем кандидатов
             for (int i = 0; i < cachedTempList.Count; i++)
@@ -136,7 +136,6 @@ namespace Core.Services.States
                     return false;
             }
 
-            // Проверяем состояния, которые будут добавлены (кроме самого newState)
             for (int i = 0; i < statesToAdd.Count; i++)
             {
                 var pendingState = statesToAdd[i];
@@ -146,6 +145,7 @@ namespace Core.Services.States
                 if (CheckStateConflict(pendingState, newState, newStateType, newStatePriority, newStateIncompatible))
                     return false;
             }
+            // Проверяем состояния, которые будут добавлены (кроме самого newState)
 
             return true;
         }

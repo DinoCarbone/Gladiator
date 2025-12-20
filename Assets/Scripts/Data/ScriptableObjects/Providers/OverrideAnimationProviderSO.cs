@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Data.Serialization;
 using UnityEngine;
+using Utils;
 
 namespace Data.ScriptableObjects.Providers
 {
@@ -28,17 +29,20 @@ namespace Data.ScriptableObjects.Providers
 
                 for (int i = 0; i < baseStates.Count; i++)
                 {
-                    var baseState = baseStates[i];
+                    AnimationStateTypeData baseState = baseStates[i];
 
                     if (baseState.StateName == clipData.animationStateSO.StateName)
                     {
                         found = true;
+                        Dictionary<string, float> overrideBlendTimes =
+                         Extensions.GetOverrideBlendTimes(clipData.overrideBlendTimeDatas) ?? baseState.OverrideBlendTimes;
 
                         var overriddenState = new AnimationStateTypeData(
                             clipData.animationStateSO.StateName,
                             clipData.clip,
                             baseState.BehaviorType,
-                            clipData.blendTime
+                            clipData.baseBlendTime,
+                            overrideBlendTimes
                         );
 
                         result.Add(overriddenState);

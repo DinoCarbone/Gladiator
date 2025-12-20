@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core.Services.States;
 
-namespace Core.Behaviors
+namespace Core.Behaviors.States
 {
     public abstract class BaseIncompatible : IIncompatibleStates
     {

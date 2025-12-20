@@ -19,9 +19,9 @@ namespace Data.ScriptableObjects.Providers
                     break;
             }
             if (animator == null)
-                throw new Exception($"AnimationProviderSO: Не удалось найти компонент  Animator в контекстах для создания провайдера {nameof(BaseAnimationProvider)}.");
+                throw new Exception($"AnimationProviderSO: Не удалось найти компонент  Animator в контекстах для создания провайдера {nameof(AnimationTransitionHandler)}.");
 
-            return new ObserverAnimatorProvider(animator, GetAnimationStateTypeDatas());
+            return new AnimationTransitionNotifier(animator, GetAnimationStateTypeDatas());
         }
         public abstract List<AnimationStateTypeData> GetAnimationStateTypeDatas();
     }

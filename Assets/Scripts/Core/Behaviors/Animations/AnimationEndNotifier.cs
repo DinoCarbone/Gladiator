@@ -7,12 +7,12 @@ using Utils;
 
 namespace Core.Behaviors.Animations
 {
-    public class ObserverAnimator : IDisposable
+    public class AnimationEndNotifier : IAnimationEndNotifier, IDisposable
     {
         private readonly ITickableService tickableService;
         private readonly Animator animator;
         private AnimationStateEnterData currentAnimationStateData;
-        public ObserverAnimator(ITickableService tickableService, Animator animator)
+        public AnimationEndNotifier(ITickableService tickableService, Animator animator)
         {
             this.tickableService = Extensions.AssignWithNullCheck(tickableService);
             this.animator = Extensions.AssignWithNullCheck(animator);
@@ -48,7 +48,6 @@ namespace Core.Behaviors.Animations
 
             if(currentAnimationStateData.EnterState is IExitActivator exitActivator)
             {
-                Debug.Log("Activating exit " + currentAnimationStateData.StateName);
                 exitActivator.ActivateExit();
             }
             else Debug.LogWarning("State doesn't implement IExitActivator");

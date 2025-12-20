@@ -58,6 +58,21 @@ namespace Utils
 
             return null; // Ничего не нашли
         }
+        public static Dictionary<string, float> GetOverrideBlendTimes(List<OverrideBlendTimeData> overrideBlendTimeDatas)
+        {
+             Dictionary<string, float> overrideBlendTimes = null;
+                if (overrideBlendTimeDatas?.Count > 0)
+                {
+                    overrideBlendTimes = new Dictionary<string, float>();
+                    foreach (var overrideBlend in overrideBlendTimeDatas)
+                    {
+                        if(!overrideBlendTimes.ContainsKey(overrideBlend.animationStateSO.StateName))
+                            overrideBlendTimes.Add(overrideBlend.animationStateSO.StateName , overrideBlend.overrideBlendTime);
+                        else Debug.LogError("Duplicate key in overrideBlendTimeDatas");
+                    }
+                }
+                return overrideBlendTimes;
+        }
 
     }
 }

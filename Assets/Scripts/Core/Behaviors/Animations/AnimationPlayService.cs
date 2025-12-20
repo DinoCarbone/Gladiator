@@ -2,11 +2,10 @@ using UnityEngine;
 
 namespace Core.Behaviors.Animations
 {
-    public class BaseAnimatorService
+    public class AnimationPlayService : IAnimationPlayService
     {
         private Animator animator;
-
-        public BaseAnimatorService(Animator animator)
+        public AnimationPlayService(Animator animator)
         {
             this.animator = animator;
         }
@@ -22,7 +21,11 @@ namespace Core.Behaviors.Animations
             SetClipForState(stateName, clip);
             if (animator.IsInTransition(0))
             {
-                animator.Play(stateName);
+                float transitionProgress = animator.GetAnimatorTransitionInfo(0).normalizedTime;
+                float remainingTime = 0.1f * (1f - transitionProgress); // Оставшееся время
+                
+                animator.CrossFade(stateName, remainingTime);
+                // animator.Play(stateName);
             }
             else animator.CrossFade(stateName, blendTime);
         }
@@ -48,6 +51,17 @@ namespace Core.Behaviors.Animations
             var overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
             animator.runtimeAnimatorController = overrideController;
             return overrideController;
+        }
+        public string GetCurrentAnimationName(int layer = 0)
+        {
+            AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(layer);
+
+            if (clipInfo.Length > 0)
+            {
+                return clipInfo[0].clip.name;
+            }
+
+            return null;
         }
 
     }

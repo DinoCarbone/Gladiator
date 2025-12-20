@@ -33,7 +33,6 @@ namespace Core.Behaviors.States.Attack
 
         public void Enter()
         {
-            Debug.Log("Enter attack");
             CanExit = false;
             OnEnter?.Invoke();
         }

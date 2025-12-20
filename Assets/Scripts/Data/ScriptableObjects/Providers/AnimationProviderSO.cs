@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Data.ScriptableObjects.Animatios;
 using Data.Serialization;
 using UnityEngine;
+using Utils;
 
 namespace Data.ScriptableObjects.Providers
 {
@@ -25,8 +26,10 @@ namespace Data.ScriptableObjects.Providers
                     Debug.LogError("BehaviorTypeSO is null");
                     continue;
                 }
+                
                 stateTypeDatas.Add(new AnimationStateTypeData(data.animationStateSO.StateName, null,
-                 data.behaviorTypeSO.GetBaseBehaviorType(), data.blendTime));
+                 data.behaviorTypeSO.GetBaseBehaviorType(), data.baseBlendTime,
+                  Extensions.GetOverrideBlendTimes(data.overrideBlendTimeDatas)));
             }
             return stateTypeDatas;
         }
