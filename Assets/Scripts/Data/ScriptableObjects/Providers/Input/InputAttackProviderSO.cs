@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Input
 {
-    [CreateAssetMenu(fileName = "InputAttackProvider", menuName = "ScriptableObjects/Providers/InputAttackProvider")]
+    [CreateAssetMenu(fileName = "InputAttackProvider", 
+    menuName = "ScriptableObjects/Providers/Input/InputAttackProvider")]
     public class InputAttackProviderSO : BaseProviderSO
     {
         public override IProvider CreateProvider(List<GameObject> contexts)

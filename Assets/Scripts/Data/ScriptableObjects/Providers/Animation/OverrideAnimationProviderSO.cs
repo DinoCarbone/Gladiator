@@ -3,9 +3,10 @@ using Data.Serialization;
 using UnityEngine;
 using Utils;
 
-namespace Data.ScriptableObjects.Providers
+namespace Data.ScriptableObjects.Providers.Animation
 {
-    [CreateAssetMenu(fileName = "OverrideAnimationProviderSO", menuName = "ScriptableObjects/Providers/Animations/OverrideAnimationProviderSO")]
+    [CreateAssetMenu(fileName = "OverrideAnimationProvider", 
+    menuName = "ScriptableObjects/Providers/Animations/OverrideAnimationProvider")]
     public class OverrideAnimationProviderSO : AnimationProviderSOBase
     {
         [SerializeField] private AnimationProviderSOBase animationProviderSO;

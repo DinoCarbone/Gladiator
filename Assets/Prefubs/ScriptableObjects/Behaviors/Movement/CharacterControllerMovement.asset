@@ -15,4 +15,5 @@ MonoBehaviour:
   incompatibleStates:
   - {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
   - {fileID: 11400000, guid: 2c6a18e30e9c046cbb34cc9bfa2c1c67, type: 2}
+  - {fileID: 11400000, guid: 1c76ef40b3b54460a9034d5353acf063, type: 2}
   moveSpeed: 5

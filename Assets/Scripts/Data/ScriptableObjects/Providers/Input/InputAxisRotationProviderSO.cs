@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Input
 {
-    [CreateAssetMenu(fileName = "InputAxisRotationProvider", menuName = "ScriptableObjects/Providers/InputAxisRotationProvider")]
+    [CreateAssetMenu(fileName = "InputAxisRotationProvider", 
+    menuName = "ScriptableObjects/Providers/Input/InputAxisRotationProvider")]
     public class InputAxisRotationProviderSO : BaseProviderSO
     {
         [SerializeField] private float rotationThreshold = 0.1f;

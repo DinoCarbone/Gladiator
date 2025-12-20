@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Core.Providers
 {
+    public interface IProvider{}
     public interface IAxisMovementProvider : IProvider
     {
         bool IsHandle { get; }
@@ -15,5 +16,14 @@ namespace Core.Providers
     public interface IAttackProvider : IProvider
     {
         bool IsAttack { get; }
+    }
+    public interface ICameraProvider
+    {
+        Transform CameraTransform { get; }
+        Camera MainCamera { get; }
+    }
+    public interface IDamageProvider : IProvider
+    {
+        event Action<int> OnTakeDamage;
     }
 }

@@ -28,4 +28,12 @@ namespace Data.Serialization
             States = new List<IState>(states);
         }
     }
+    public class AllEntityData
+    {
+        public readonly IReadOnlyList<object> EntityData;
+        public AllEntityData(IReadOnlyList<object> entityData)
+        {
+            EntityData = new List<object>(entityData);
+        }
+    }
 }

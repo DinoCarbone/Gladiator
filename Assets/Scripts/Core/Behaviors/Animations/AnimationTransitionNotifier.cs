@@ -6,6 +6,7 @@ using UnityEngine;
 using Zenject;
 using Utils;
 using Data.ScriptableObjects.Animatios;
+using Core.Behaviors.Interaction;
 
 namespace Core.Behaviors.Animations
 {
@@ -13,16 +14,19 @@ namespace Core.Behaviors.Animations
     {
         private IAnimationEndNotifier observerEnding;
         private IAnimationEventsNotifier observerEvents;
+        private IAnimationEventReceiveService animationEventListener;
+        
         public AnimationTransitionNotifier(Animator animator, List<AnimationStateTypeData> templateAnimationStates) : 
         base(animator, templateAnimationStates)
         {
         }
         [Inject]
         private void Construct(IAnimationEndNotifierFactory animationEndNotifierFactory, 
-        IAnimationEventsNotifierFactory animationEventsNotifierFactory)
+        IAnimationEventsNotifierFactory animationEventsNotifierFactory, IAnimationEventReceiveService animationEventListener)
         {
             observerEnding = Extensions.AssignWithNullCheck(animationEndNotifierFactory.Create(animator));
             observerEvents = Extensions.AssignWithNullCheck(animationEventsNotifierFactory.Create(animator));
+            this.animationEventListener = Extensions.AssignWithNullCheck(animationEventListener);
         }
         protected override void OnEnterState(AnimationStateEnterData enterData)
         {
@@ -40,7 +44,7 @@ namespace Core.Behaviors.Animations
 
         private void NotifySubject(AnimationEventSO animationEvent)
         {
-            Debug.Log($"Animation event: {animationEvent.EventName}");
+            animationEventListener.OnAnimationEvent(animationEvent);
         }
 
         protected override void Unsubscribe()

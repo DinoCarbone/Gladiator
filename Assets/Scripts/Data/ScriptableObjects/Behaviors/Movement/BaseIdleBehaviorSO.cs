@@ -9,7 +9,8 @@ namespace Data.ScriptableObjects.Behaviors.Movement
     /// <summary>
     /// Используется только для прокидывания в списки несовместимых состояний.
     /// </summary>
-    [CreateAssetMenu(fileName = "_BaseIdle", menuName = "ScriptableObjects/Behaviors/Base/BaseIdle")]
+    [CreateAssetMenu(fileName = "_BaseIdle", 
+    menuName = "ScriptableObjects/Behaviors/Base/BaseIdle")]
     public class BaseIdleBehaviorSO : BaseBehaviorSO
     {
         public override IState CreateConfigState(List<GameObject> contexts)

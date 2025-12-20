@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Input
 {
-    [CreateAssetMenu(fileName = "InputAxisMovement", menuName = "ScriptableObjects/Providers/InputAxisMovementProvider")]
+    [CreateAssetMenu(fileName = "InputAxisMovement", 
+    menuName = "ScriptableObjects/Providers/Input/InputAxisMovementProvider")]
     public class InputAxisMovementProviderSO : BaseProviderSO
     {
         public override IProvider CreateProvider(List<GameObject> _)

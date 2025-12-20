@@ -5,7 +5,7 @@ using Core.Providers;
 using Data.Serialization;
 using UnityEngine;
 
-namespace Data.ScriptableObjects.Providers
+namespace Data.ScriptableObjects.Providers.Animation
 {
     public abstract class AnimationProviderSOBase : BaseProviderSO
     {

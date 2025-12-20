@@ -82,6 +82,9 @@ namespace Core.Behaviors.Entities
 
             StateListData stateListData = new StateListData(entityStates);
             statesAsObjects.Add(stateListData);
+
+            AllEntityData allEntityData = new AllEntityData(statesAsObjects);
+            statesAsObjects.Add(allEntityData);
             
             hybridInjectService.InjectAll(statesAsObjects);
         }

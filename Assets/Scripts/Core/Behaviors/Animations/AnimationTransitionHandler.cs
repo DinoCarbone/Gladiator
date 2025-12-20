@@ -92,8 +92,7 @@ namespace Core.Behaviors.Animations
             {
                 string currentStateName = animatorService.GetCurrentAnimationName();
                 if( !string.IsNullOrEmpty(currentStateName) && 
-                enterData.OverrideBlendTimes.TryGetValue(currentStateName, out blendTime))
-                Debug.Log($"Overriding blendTime for {enterData.StateName} to {blendTime}");
+                enterData.OverrideBlendTimes.TryGetValue(currentStateName, out blendTime)){}
                 else blendTime = enterData.BlendTime;
             }
 

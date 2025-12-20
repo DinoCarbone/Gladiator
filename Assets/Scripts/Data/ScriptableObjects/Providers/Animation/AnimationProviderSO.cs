@@ -4,10 +4,10 @@ using Data.Serialization;
 using UnityEngine;
 using Utils;
 
-namespace Data.ScriptableObjects.Providers
+namespace Data.ScriptableObjects.Providers.Animation
 {
-     [CreateAssetMenu(fileName = "AnimationProviderSO",
-      menuName = "ScriptableObjects/Providers/Animations/AnimationProviderSO")]
+     [CreateAssetMenu(fileName = "AnimationProvider",
+      menuName = "ScriptableObjects/Providers/Animations/AnimationProvider")]
     public class AnimationProviderSO : AnimationProviderSOBase
     {
         [SerializeField] private List<AnimationSerializeTypeData> animationSerializeTypeDatas;

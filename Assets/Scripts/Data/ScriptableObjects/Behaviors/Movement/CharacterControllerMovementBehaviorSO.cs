@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Behaviors.Movement
 {
-    [CreateAssetMenu(fileName = "CharacterControllerMovement", menuName = "ScriptableObjects/Behaviors/Movement/CharacterController")]
+    [CreateAssetMenu(fileName = "CharacterControllerMovement", 
+    menuName = "ScriptableObjects/Behaviors/Movement/CharacterControllerMovement")]
     public class CharacterControllerMovementBehaviorSO : BehaviorSO<CharacterControllerMovementState>
     {
         [SerializeField] private float moveSpeed = 5f;

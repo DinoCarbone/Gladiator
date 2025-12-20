@@ -2,12 +2,6 @@ using UnityEngine;
 
 namespace Core.Providers
 {
-    public interface ICameraProvider
-    {
-        Transform CameraTransform { get; }
-        Camera MainCamera { get; }
-    }
-
     public class CameraProvider : ICameraProvider
     {
         private readonly Camera mainCamera;
