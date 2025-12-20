@@ -19,3 +19,9 @@ MonoBehaviour:
   - blendTime: 0.01
     animationStateSO: {fileID: 11400000, guid: 144775e1fb03d44adae04a873255ae5c, type: 2}
     behaviorTypeSO: {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}
+  - blendTime: 0.2
+    animationStateSO: {fileID: 11400000, guid: 144775e1fb03d44adae04a873255ae5c, type: 2}
+    behaviorTypeSO: {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}
+  - blendTime: 0.01
+    animationStateSO: {fileID: 11400000, guid: 5a046e45e51a047cf92dedf9da15e14c, type: 2}
+    behaviorTypeSO: {fileID: 11400000, guid: 2c6a18e30e9c046cbb34cc9bfa2c1c67, type: 2}

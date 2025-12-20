@@ -8,21 +8,21 @@ using Core.Services.States;
 
 namespace Core.Behaviors.Animations
 {
-    public class ExampleAnimationProvider : Providers.IProvider, IDisposable
+    public class BaseAnimationProvider : Providers.IProvider, IDisposable
     {
         private List<AnimationStateTypeData> templateAnimationStates = new List<AnimationStateTypeData>();
         private readonly List<AnimationStateEnterData> animationStates = new List<AnimationStateEnterData>();
         private readonly BaseAnimatorService animatorService;
         private readonly Dictionary<AnimationStateEnterData, Action> enterHandlers = new();
 
-        public ExampleAnimationProvider(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
+        public BaseAnimationProvider(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
         {
             animatorService = new BaseAnimatorService(animator);
             this.templateAnimationStates = Extensions.AssignWithNullCheck(templateAnimationStates);
         }
 
         [Inject]
-        private void Construct(StateListData animationStates)
+        public void Construct(StateListData animationStates)
         {
             CreateAnimationStates(animationStates.States);
             Subscribe();
@@ -83,13 +83,12 @@ namespace Core.Behaviors.Animations
             enterHandlers.Clear();
         }
         
-        private void OnEnterState(AnimationStateEnterData enterData)
+        protected virtual void OnEnterState(AnimationStateEnterData enterData)
         {
-            Debug.Log(enterData.StateName);
             animatorService.Play(enterData.StateName, enterData.Clip, enterData.BlendTime);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Unsubscribe();
             animationStates.Clear();

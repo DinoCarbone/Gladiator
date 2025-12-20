@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.Movement.CharacterControllerMovementBehaviorSO
   incompatibleStates:
   - {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
+  - {fileID: 11400000, guid: 2c6a18e30e9c046cbb34cc9bfa2c1c67, type: 2}
   moveSpeed: 5

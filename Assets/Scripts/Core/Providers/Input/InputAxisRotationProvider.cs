@@ -4,16 +4,15 @@ using UnityEngine;
 using Zenject;
 using Utils;
 
-namespace Core.Providers
+namespace Core.Providers.Input
 {
     public class InputAxisRotationProvider : IAxisRotationProvider, IDisposable
     {
         private IMovementInput movementInput;
         private Transform cameraTransform;
         private readonly float rotationThreshold = 0.1f;
-
-        public Quaternion Rotation { get; private set; } = Quaternion.identity;
-        public event Action<Quaternion> OnAxisRotation;
+        private Quaternion rotation = Quaternion.identity;
+        public Quaternion Rotation => GetAxisRotation();
 
 
         public InputAxisRotationProvider(float rotationThreshold)
@@ -25,13 +24,11 @@ namespace Core.Providers
         private void Construct(IMovementInput movementInput, ICameraProvider cameraProvider)
         {
             this.movementInput = movementInput;
-            movementInput.OnMovementAxisChanged += OnInputAxisChanged;
             cameraTransform = Extensions.AssignWithNullCheck(cameraProvider.CameraTransform);
         }
-
-        private void OnInputAxisChanged(Vector2 axis)
+        private Quaternion GetAxisRotation()
         {
-            if (axis.magnitude > rotationThreshold)
+            if (movementInput.Axis.magnitude > rotationThreshold)
             {
                 Vector3 cameraForward = cameraTransform.forward;
                 cameraForward.y = 0;
@@ -41,17 +38,16 @@ namespace Core.Providers
                 cameraRight.y = 0;
                 cameraRight.Normalize();
 
-                Vector3 targetDirection = (cameraForward * axis.y + cameraRight * axis.x).normalized;
+                Vector3 targetDirection = (cameraForward * movementInput.Axis.y + 
+                cameraRight * movementInput.Axis.x).normalized;
 
-                Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                Rotation = targetRotation;
-                OnAxisRotation?.Invoke(targetRotation);
+                rotation = Quaternion.LookRotation(targetDirection);
             }
+            return rotation;
         }
 
         public void Dispose()
         {
-            movementInput.OnMovementAxisChanged -= OnInputAxisChanged;
             movementInput = null;
         }
     }

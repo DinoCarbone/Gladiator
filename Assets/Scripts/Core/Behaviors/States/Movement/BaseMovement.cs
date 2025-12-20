@@ -20,9 +20,9 @@ namespace Core.Behaviors.States.Movement
         public event Action OnEnter;
         public event Action OnExit;
 
-        public bool CanEnter => inputAxisProvider.Axis != Vector2.zero;
+        public bool CanEnter => inputAxisProvider.IsHandle;
 
-        public bool CanExit => inputAxisProvider.Axis == Vector2.zero;
+        public bool CanExit => !inputAxisProvider.IsHandle;
 
         protected BaseAxisMovement(List<Type> incompatibleStates) : base(incompatibleStates)
         {

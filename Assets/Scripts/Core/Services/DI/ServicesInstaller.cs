@@ -18,6 +18,12 @@ namespace Core.Services.DI
             Container.Bind<ICameraProvider>()
                  .To<CameraProvider>().FromInstance(new CameraProvider(Camera.main))
                  .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<TickableService>().AsSingle(); 
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
+
     }
 }

@@ -5,8 +5,6 @@ namespace Core.Behaviors.Animations
     public class BaseAnimatorService
     {
         private Animator animator;
-        private AnimationClip currentClip;
-        private string currentStateName;
 
         public BaseAnimatorService(Animator animator)
         {
@@ -20,19 +18,13 @@ namespace Core.Behaviors.Animations
                 Debug.LogError("StateName не могут быть null!");
                 return;
             }
-
-
+            
             SetClipForState(stateName, clip);
-            if (clip == currentClip && stateName == currentStateName)
+            if (animator.IsInTransition(0))
             {
                 animator.Play(stateName);
-                return;
             }
-
-            animator.CrossFade(stateName, blendTime);
-
-            currentClip = clip;
-            currentStateName = stateName;
+            else animator.CrossFade(stateName, blendTime);
         }
 
         private void SetClipForState(string stateName, AnimationClip clip)

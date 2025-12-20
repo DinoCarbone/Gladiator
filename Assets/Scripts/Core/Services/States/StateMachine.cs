@@ -10,6 +10,10 @@ namespace Core.Services.States
         private List<IState> statesToAdd = new List<IState>();
         private List<IState> statesToRemove = new List<IState>();
         private bool isProcessing = false;
+        private HashSet<IState> exitingStates = new HashSet<IState>();
+
+        // Чтобы не создавать новые списки и не засорять GC
+        private List<IState> cachedTempList = new List<IState>();
 
         public StateMachine(
             List<IState> initialStateList,
@@ -26,11 +30,12 @@ namespace Core.Services.States
 
             try
             {
-                UpdateCurrentStates();
                 ProcessExits();
+                UpdateCurrentStates();
                 ProcessNewStates();
                 EnsureActiveStates();
                 ApplyPendingChanges();
+                exitingStates.Clear();
             }
             finally
             {
@@ -42,7 +47,11 @@ namespace Core.Services.States
 
         private void UpdateCurrentStates()
         {
-            foreach (var state in currentStates)
+            // Используем кешированный список для безопасной итерации
+            cachedTempList.Clear();
+            cachedTempList.AddRange(currentStates);
+
+            foreach (var state in cachedTempList)
             {
                 if (updateHandlers.Count > 0)
                 {
@@ -53,12 +62,17 @@ namespace Core.Services.States
 
         private void ProcessExits()
         {
+            // Итерируем в обратном порядке
             for (int i = currentStates.Count - 1; i >= 0; i--)
             {
                 var state = currentStates[i];
 
+                if (exitingStates.Contains(state))
+                    continue;
+
                 if (canExitConditions.Count > 0 && CheckCondition(state, canExitConditions))
                 {
+                    exitingStates.Add(state);
                     if (exitHandlers.Count > 0)
                     {
                         ExecuteHandler(state, exitHandlers);
@@ -70,19 +84,31 @@ namespace Core.Services.States
 
         private void ProcessNewStates()
         {
+            // Собираем кандидатов в кешированный список
+            cachedTempList.Clear();
+
             foreach (var state in allStates)
             {
-                // Пропускаем если уже активно
-                if (currentStates.Contains(state) || statesToAdd.Contains(state))
+                // Быстрая проверка через Contains
+                if (currentStates.Contains(state) || exitingStates.Contains(state) || statesToAdd.Contains(state))
                     continue;
 
                 if (canEnterConditions.Count > 0 && !CheckCondition(state, canEnterConditions))
                     continue;
 
+                cachedTempList.Add(state);
+            }
+
+            // Сортируем по приоритету (высший приоритет первый)
+            cachedTempList.Sort((a, b) => GetPriority(b.GetType()).CompareTo(GetPriority(a.GetType())));
+
+            // Обрабатываем кандидатов
+            for (int i = 0; i < cachedTempList.Count; i++)
+            {
+                var state = cachedTempList[i];
                 if (CanAddState(state))
                 {
                     statesToAdd.Add(state);
-
                     if (enterHandlers.Count > 0)
                     {
                         ExecuteHandler(state, enterHandlers);
@@ -91,73 +117,127 @@ namespace Core.Services.States
             }
         }
 
-        private bool CanAddState(IState state)
+        private bool CanAddState(IState newState)
         {
-            var stateType = state.GetType();
-            int statePriority = GetPriority(stateType);
+            var newStateType = newState.GetType();
+            int newStatePriority = GetPriority(newStateType);
+            var newStateIncompatible = GetIncompatibleTypes(newState);
 
-            var stateIncompatible = GetIncompatibleTypes(state);
-
-            foreach (var currentState in currentStates.Concat(statesToAdd))
+            // Проверяем текущие состояния (которые не будут удалены)
+            for (int i = 0; i < currentStates.Count; i++)
             {
-                if (currentState == state) continue;
+                var activeState = currentStates[i];
 
-                var currentType = currentState.GetType();
+                // Пропускаем состояния, которые будут удалены
+                if (statesToRemove.Contains(activeState))
+                    continue;
 
-                if (stateIncompatible.Any(incompatible => incompatible.IsAssignableFrom(currentType)))
-                {
-                    int currentPriority = GetPriority(currentType);
+                if (CheckStateConflict(activeState, newState, newStateType, newStatePriority, newStateIncompatible))
+                    return false;
+            }
 
-                    if (currentPriority < statePriority)
-                    {
-                        return false;
-                    }
+            // Проверяем состояния, которые будут добавлены (кроме самого newState)
+            for (int i = 0; i < statesToAdd.Count; i++)
+            {
+                var pendingState = statesToAdd[i];
+                if (pendingState == newState)
+                    continue;
 
-                    if (!statesToRemove.Contains(currentState))
-                    {
-                        statesToRemove.Add(currentState);
-                        if (exitHandlers.Count > 0)
-                        {
-                            ExecuteHandler(currentState, exitHandlers);
-                        }
-                    }
-                }
-
-                var currentIncompatible = GetIncompatibleTypes(currentState);
-                if (currentIncompatible.Any(incompatible => incompatible.IsAssignableFrom(stateType)))
-                {
-                    int currentPriority = GetPriority(currentType);
-
-                    if (currentPriority < statePriority)
-                    {
-                        Debug.LogWarning($"Cannot add {stateType.Name} - conflicts with higher priority {currentType.Name}");
-                        return false;
-                    }
-
-                    if (!statesToRemove.Contains(currentState))
-                    {
-                        statesToRemove.Add(currentState);
-                        if (exitHandlers.Count > 0)
-                        {
-                            ExecuteHandler(currentState, exitHandlers);
-                        }
-                    }
-                }
+                if (CheckStateConflict(pendingState, newState, newStateType, newStatePriority, newStateIncompatible))
+                    return false;
             }
 
             return true;
         }
 
+        private bool CheckStateConflict(IState existingState, IState newState, Type newStateType, int newStatePriority, IReadOnlyList<Type> newStateIncompatible)
+        {
+            var existingType = existingState.GetType();
+
+            // 1. Проверяем, несовместимо ли новое состояние с существующим
+            for (int i = 0; i < newStateIncompatible.Count; i++)
+            {
+                if (newStateIncompatible[i].IsAssignableFrom(existingType))
+                {
+                    return HandleConflict(existingState, existingType, newStateType, newStatePriority);
+                }
+            }
+
+            // 2. Проверяем, несовместимо ли существующее состояние с новым
+            var existingIncompatible = GetIncompatibleTypes(existingState);
+            for (int i = 0; i < existingIncompatible.Count; i++)
+            {
+                if (existingIncompatible[i].IsAssignableFrom(newStateType))
+                {
+                    return HandleConflict(existingState, existingType, newStateType, newStatePriority);
+                }
+            }
+
+            return false; // Конфликта нет
+        }
+
+        private bool HandleConflict(IState conflictingState, Type conflictingType, Type newStateType, int newStatePriority)
+        {
+            int conflictingPriority = GetPriority(conflictingType);
+
+            // Существующее состояние имеет ВЫСШИЙ приоритет - новый не может быть добавлен
+            if (conflictingPriority < newStatePriority)
+            {
+                return true; // Есть конфликт, который нельзя разрешить
+            }
+
+            // Существующее состояние имеет НИЖНИЙ или РАВНЫЙ приоритет - вытесняем его
+            if (!exitingStates.Contains(conflictingState) && !statesToRemove.Contains(conflictingState))
+            {
+                exitingStates.Add(conflictingState);
+                statesToRemove.Add(conflictingState);
+                if (exitHandlers.Count > 0)
+                {
+                    ExecuteHandler(conflictingState, exitHandlers);
+                }
+            }
+
+            return false; // Конфликт разрешен (состояние будет вытеснено)
+        }
+
         private void EnsureActiveStates()
         {
-            if (currentStates.Count == 0 && statesToAdd.Count == 0)
+            // Используем кешированный список для расчета будущих состояний
+            cachedTempList.Clear();
+            cachedTempList.AddRange(currentStates);
+
+            // Удаляем состояния, которые будут удалены
+            for (int i = cachedTempList.Count - 1; i >= 0; i--)
             {
-                foreach (var idleState in idleStates)
+                if (statesToRemove.Contains(cachedTempList[i]))
                 {
-                    statesToAdd.Add(idleState);
-                    if (enterHandlers.Count > 0)
+                    cachedTempList.RemoveAt(i);
+                }
+            }
+
+            // Добавляем состояния, которые будут добавлены
+            for (int i = 0; i < statesToAdd.Count; i++)
+            {
+                var state = statesToAdd[i];
+                if (!cachedTempList.Contains(state))
+                {
+                    cachedTempList.Add(state);
+                }
+            }
+
+            // Если не останется активных состояний - добавляем idle
+            if (cachedTempList.Count == 0)
+            {
+                for (int i = 0; i < idleStates.Count; i++)
+                {
+                    var idleState = idleStates[i];
+                    if (!statesToAdd.Contains(idleState))
                     {
-                        ExecuteHandler(idleState, enterHandlers);
+                        statesToAdd.Add(idleState);
+                        if (enterHandlers.Count > 0)
+                        {
+                            ExecuteHandler(idleState, enterHandlers);
+                        }
                     }
                 }
             }
@@ -165,17 +245,30 @@ namespace Core.Services.States
 
         private void ApplyPendingChanges()
         {
-            foreach (var state in statesToRemove)
+            // Удаляем состояния (итерируем в обратном порядке для эффективности)
+            for (int i = statesToRemove.Count - 1; i >= 0; i--)
             {
-                currentStates.Remove(state);
+                currentStates.Remove(statesToRemove[i]);
             }
 
-            foreach (var state in statesToAdd)
+            for (int i = 0; i < statesToAdd.Count; i++)
             {
+                var state = statesToAdd[i];
                 if (!currentStates.Contains(state))
                 {
                     currentStates.Add(state);
                 }
+            }
+        }
+
+        public void DebugLogCurrentState()
+        {
+            Debug.Log($"Active states ({currentStates.Count}):");
+            for (int i = 0; i < currentStates.Count; i++)
+            {
+                var state = currentStates[i];
+                var type = state.GetType();
+                Debug.Log($"  - {type.Name} (Priority: {GetPriority(type)})");
             }
         }
     }

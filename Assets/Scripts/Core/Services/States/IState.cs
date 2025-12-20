@@ -26,6 +26,10 @@ namespace Core.Services.States
     {
         void Exit();
     }
+    public interface IExitActivator : IState
+    {
+        void ActivateExit();
+    }
     public interface IIncompatibleStates : IState
     {
         IReadOnlyList<Type> IncompatibleStates { get; }

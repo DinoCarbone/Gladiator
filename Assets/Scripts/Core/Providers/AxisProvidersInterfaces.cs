@@ -5,12 +5,15 @@ namespace Core.Providers
 {
     public interface IAxisMovementProvider : IProvider
     {
+        bool IsHandle { get; }
         Vector2 Axis { get; }
-        public event Action<Vector2> OnAxisChanged;
     }
     public interface IAxisRotationProvider : IProvider
     {
         Quaternion Rotation { get; }
-        public event Action<Quaternion> OnAxisRotation;
+    }
+    public interface IAttackProvider : IProvider
+    {
+        bool IsAttack { get; }
     }
 }

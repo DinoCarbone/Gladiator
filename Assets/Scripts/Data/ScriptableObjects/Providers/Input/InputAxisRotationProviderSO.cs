@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Core.Providers;
+using Core.Providers.Input;
 using UnityEngine;
 
-namespace Data.ScriptableObjects.Providers
+namespace Data.ScriptableObjects.Providers.Input
 {
     [CreateAssetMenu(fileName = "InputAxisRotationProvider", menuName = "ScriptableObjects/Providers/InputAxisRotationProvider")]
     public class InputAxisRotationProviderSO : BaseProviderSO
