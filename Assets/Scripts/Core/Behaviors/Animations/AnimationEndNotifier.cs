@@ -29,14 +29,13 @@ namespace Core.Behaviors.Animations
             if(currentAnimationStateData == null) return;
 
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
             if (stateInfo.IsName(currentAnimationStateData.StateName))
             {
                 float animationLength = stateInfo.length; 
                 float timeLeft = animationLength * (1f - stateInfo.normalizedTime);
                 float warningTime = currentAnimationStateData.BlendTime;
 
-                if (timeLeft <= warningTime && timeLeft > 0)
+                if (timeLeft < warningTime && !animator.IsInTransition(0))
                 {
                     NotifyAnimationEnded();
                 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core.Services.States;
 using Data.ScriptableObjects.Animatios;
-using Data.ScriptableObjects.Behaviors;
+using Data.ScriptableObjects.States;
 using UnityEngine;
 
 namespace Data.Serialization

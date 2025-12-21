@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Core.Services.States;
-using Data.ScriptableObjects.Behaviors;
 using Data.ScriptableObjects.Providers;
+using Data.ScriptableObjects.States;
 using UnityEngine;
 
 namespace Data.Serialization

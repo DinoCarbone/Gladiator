@@ -8,6 +8,7 @@ namespace Core.Services.DI
 {
     public class ServicesInstaller : MonoInstaller
     {
+        [SerializeField] private Transform playerTransform;
         public override void InstallBindings()
         {
             Container.Bind<IHybridInjectService>()
@@ -22,6 +23,9 @@ namespace Core.Services.DI
 
             Container.BindInterfacesAndSelfTo<TickableService>().AsSingle(); 
 
+            Container.Bind<IPlayerSceneProvider>().
+            To<PlayerSceneProvider>().FromMethod(GetPlayerSceneProvider).AsSingle();
+
             BindAnimationFactories();
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -32,6 +36,10 @@ namespace Core.Services.DI
             Container.BindInterfacesAndSelfTo<AnimationPlayServiceFactory>().AsSingle();
             Container.BindInterfacesAndSelfTo<AnimationEndNotifierFactory>().AsSingle();
             Container.BindInterfacesAndSelfTo<AnimationEventsNotifierFactory>().AsSingle();
+        }
+        private PlayerSceneProvider GetPlayerSceneProvider()
+        {
+            return new PlayerSceneProvider(playerTransform);
         }
 
     }

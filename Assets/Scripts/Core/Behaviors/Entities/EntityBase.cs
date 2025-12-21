@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using Core.Services.DI;
 using Core.Services.States;
-using Data.ScriptableObjects.Behaviors;
 using Data.Serialization;
 using UnityEngine;
 using Zenject;
 using Utils;
-using Core.Providers;
 using System;
+using Data.ScriptableObjects.States;
 
 namespace Core.Behaviors.Entities
 {

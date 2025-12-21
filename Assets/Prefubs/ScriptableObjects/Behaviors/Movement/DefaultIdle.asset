@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ddb4ab7044ae4e7398f71de0eb57154, type: 3}
-  m_Name: DefautAttack
-  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.Attack.DefautAttackBehaviorSO
+  m_Script: {fileID: 11500000, guid: 13170d2fd7a9f4db8b7e9e00f6c06859, type: 3}
+  m_Name: DefaultIdle
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.Movement.EmptyIdleBehaviorSO
   incompatibleStates:
   - {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}
-  - {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
+  - {fileID: 11400000, guid: 2c6a18e30e9c046cbb34cc9bfa2c1c67, type: 2}
   - {fileID: 11400000, guid: 1c76ef40b3b54460a9034d5353acf063, type: 2}

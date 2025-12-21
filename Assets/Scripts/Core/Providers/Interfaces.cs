@@ -17,13 +17,17 @@ namespace Core.Providers
     {
         bool IsAttack { get; }
     }
+    public interface IDamageProvider : IProvider
+    {
+        event Action<int> OnTakeDamage;
+    }
     public interface ICameraProvider
     {
         Transform CameraTransform { get; }
         Camera MainCamera { get; }
     }
-    public interface IDamageProvider : IProvider
+    public interface IPlayerSceneProvider
     {
-        event Action<int> OnTakeDamage;
+        Transform Transform { get; }
     }
 }

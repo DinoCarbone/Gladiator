@@ -199,6 +199,17 @@ MonoBehaviour:
   - behaviorSO: {fileID: 11400000, guid: cd3a0ac05857a4440a1e4ce54a04710a, type: 2}
     contexts: []
     isDefaultState: 1
+  - behaviorSO: {fileID: 11400000, guid: 5c4e0fc3bafba45248c010da0d4c84cf, type: 2}
+    contexts:
+    - {fileID: 1264956640}
+    isDefaultState: 0
+  - behaviorSO: {fileID: 11400000, guid: d8f434bb48a204694a0c25cdae9bd6f7, type: 2}
+    contexts:
+    - {fileID: 1264956640}
+    isDefaultState: 0
+  - behaviorSO: {fileID: 11400000, guid: dfde3ad50478e4a66ba5bd6d36bb0520, type: 2}
+    contexts: []
+    isDefaultState: 0
   - behaviorSO: {fileID: 11400000, guid: 1aed945cd60554576a238a2eff995be0, type: 2}
     contexts: []
     isDefaultState: 0
@@ -210,7 +221,15 @@ MonoBehaviour:
     contexts: []
   - providerSO: {fileID: 11400000, guid: 83b5cc65ae25a4ccfbf14ef2f708a91a, type: 2}
     contexts: []
+  - providerSO: {fileID: 11400000, guid: 935790873cc9441ca9bdd97edb7cb4a9, type: 2}
+    contexts: []
   - providerSO: {fileID: 11400000, guid: 790272070d66f4aa4a4cfb404a566634, type: 2}
+    contexts:
+    - {fileID: 1264956640}
+  - providerSO: {fileID: 11400000, guid: 485eb600d3cae4855bdf0c34073bad32, type: 2}
+    contexts:
+    - {fileID: 1004231407}
+  - providerSO: {fileID: 11400000, guid: 22159068fbc8a49f3940259efc45085a, type: 2}
     contexts:
     - {fileID: 1264956640}
 --- !u!1 &568497170
@@ -703,13 +722,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1
-  m_Radius: 0.5
+  m_Height: 1.73
+  m_Radius: 0.38
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.52, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &812839704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,6 +1214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf69aa77a5c4b9f86aaa979f7fdbd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Services.DI.ServicesInstaller
+  playerTransform: {fileID: 670342547}
 --- !u!1001 &1002763265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2565,6 +2585,9 @@ MonoBehaviour:
   - behaviorSO: {fileID: 11400000, guid: dfde3ad50478e4a66ba5bd6d36bb0520, type: 2}
     contexts: []
     isDefaultState: 0
+  - behaviorSO: {fileID: 11400000, guid: 1aed945cd60554576a238a2eff995be0, type: 2}
+    contexts: []
+    isDefaultState: 0
   providersSO:
   - providerSO: {fileID: 11400000, guid: 19a9d65adff37420cbe1259e9c0aa4e4, type: 2}
     contexts:
@@ -2579,11 +2602,14 @@ MonoBehaviour:
     contexts: []
   - providerSO: {fileID: 11400000, guid: 935790873cc9441ca9bdd97edb7cb4a9, type: 2}
     contexts: []
+  - providerSO: {fileID: 11400000, guid: 83b5cc65ae25a4ccfbf14ef2f708a91a, type: 2}
+    contexts: []
   - providerSO: {fileID: 11400000, guid: 485eb600d3cae4855bdf0c34073bad32, type: 2}
     contexts:
     - {fileID: 1891435505}
-  - providerSO: {fileID: 11400000, guid: 83b5cc65ae25a4ccfbf14ef2f708a91a, type: 2}
-    contexts: []
+  - providerSO: {fileID: 11400000, guid: 790272070d66f4aa4a4cfb404a566634, type: 2}
+    contexts:
+    - {fileID: 670342546}
 --- !u!4 &1137770731
 Transform:
   m_ObjectHideFlags: 0
