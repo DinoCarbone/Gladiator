@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PriorityBehaviors
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.PriorityBehaviorsSO
   behaviorPriorities:
+  - {fileID: 11400000, guid: 7d8c436717cea4ae69821af4b85bfa84, type: 2}
   - {fileID: 11400000, guid: 1c76ef40b3b54460a9034d5353acf063, type: 2}
   - {fileID: 11400000, guid: 2c6a18e30e9c046cbb34cc9bfa2c1c67, type: 2}
   - {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}

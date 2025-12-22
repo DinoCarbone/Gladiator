@@ -9,9 +9,10 @@ namespace Data.ScriptableObjects.Providers.Health
       menuName = "ScriptableObjects/Providers/Health/HealthService")]
     public class HealthServiceSO : BaseProviderSO
     {
+        [SerializeField] private int maxHealth = 100;
         public override IProvider CreateProvider(List<GameObject> _)
         {
-            return new HealthService();
+            return new HealthService(maxHealth);
         }
     }
 }

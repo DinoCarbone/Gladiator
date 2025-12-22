@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ddb4ab7044ae4e7398f71de0eb57154, type: 3}
+  m_Name: EnemyAttack
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Behaviors.Attack.DefautAttackBehaviorSO
+  incompatibleStates:
+  - {fileID: 11400000, guid: 6520308e11e7f46bf8b9f032535fa8af, type: 2}
+  - {fileID: 11400000, guid: 7f4e17daeaa674110bef23a4b710968c, type: 2}
+  - {fileID: 11400000, guid: 1c76ef40b3b54460a9034d5353acf063, type: 2}
+  - {fileID: 11400000, guid: f784cdc445e6440a3a18ac4aae4bac03, type: 2}
+  - {fileID: 11400000, guid: 7d8c436717cea4ae69821af4b85bfa84, type: 2}

@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a44119070e4403fa862034a553c64c, type: 3}
   m_Name: HealthService
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Interaction.DamageReceiverSO
+  maxHealth: 100

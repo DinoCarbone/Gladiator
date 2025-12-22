@@ -21,6 +21,10 @@ namespace Core.Providers
     {
         event Action<int> OnTakeDamage;
     }
+    public interface IDeathProvider : IProvider
+    {
+        event Action OnDie;
+    }
     public interface ICameraProvider
     {
         Transform CameraTransform { get; }

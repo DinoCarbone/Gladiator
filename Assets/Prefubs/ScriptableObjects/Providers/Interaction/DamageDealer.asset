@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DamageDealer
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Interaction.DamageDealerSO
   radius: 0.3
-  damage: 20
+  damage: 40
   distance: 1.9
   animationEvent: {fileID: 11400000, guid: 21b373e9222d740eead76b48b3bca6da, type: 2}
