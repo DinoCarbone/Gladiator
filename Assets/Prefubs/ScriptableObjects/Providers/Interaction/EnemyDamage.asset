@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa294354805f3453198aaeef1eefd819, type: 3}
+  m_Name: EnemyDamage
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Interaction.DamageDealerSO
+  radius: 0.5
+  damage: 35
+  distance: 1.28
+  animationEvent: {fileID: 11400000, guid: 21b373e9222d740eead76b48b3bca6da, type: 2}

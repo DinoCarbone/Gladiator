@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EnemyAgetn
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Agents.EnemyAgetnSO
   attackAngleThreshold: 20
-  attackDistance: 1.7
+  attackDistance: 1.28

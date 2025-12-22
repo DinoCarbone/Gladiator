@@ -34,4 +34,17 @@ namespace Core.Providers
     {
         Transform Transform { get; }
     }
+    public interface IPlayerCameraPoint
+    {
+        Transform PointToLoockCamera { get; }
+    }
+    public interface IScoreProvider
+    {
+        int Score { get; }
+        event Action<int> OnScoreChanged;
+    }
+    public interface IScoreCostData
+    {
+        int Cost { get; }
+    }
 }

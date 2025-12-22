@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724730cc71e124123829302bdc864ad6, type: 3}
+  m_Name: OverrideEnemyAnimation
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Animation.OverrideAnimationProviderSO
+  animationProviderSO: {fileID: 11400000, guid: 19a9d65adff37420cbe1259e9c0aa4e4, type: 2}
+  clipDatas:
+  - baseBlendTime: 0.01
+    animationStateSO: {fileID: 11400000, guid: 5a046e45e51a047cf92dedf9da15e14c, type: 2}
+    overrideBlendTimeDatas: []
+    clip: {fileID: 7400000, guid: 065433bd74fe9463a9283f828d3aec64, type: 2}
+  - baseBlendTime: 0.05
+    animationStateSO: {fileID: 11400000, guid: 144775e1fb03d44adae04a873255ae5c, type: 2}
+    overrideBlendTimeDatas: []
+    clip: {fileID: 0}

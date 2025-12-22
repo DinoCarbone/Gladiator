@@ -1,27 +1,21 @@
+using Core.Providers;
 using UnityEngine;
 using Utils;
 
 namespace Core.Behaviors.Lifecycle
 {
-    public class BaseKillableData : IKillableData
+    public class PlayerKillableData : IPlayerKillableData{}
+    public class EnemyKillableData : IEnemyKillableData
     {
         private readonly GameObject coreGameObject;
         public GameObject CoreGameObject => coreGameObject;
-        protected BaseKillableData(GameObject coreGameObject)
+        private readonly int cost;
+        public int Cost => cost;
+
+        public EnemyKillableData(GameObject coreGameObject, int cost)
         {
+            this.cost = Extensions.AssignWithZeroCheck(cost);
             this.coreGameObject = Extensions.AssignWithNullCheck(coreGameObject);
-        }
-    }
-    public class PlayerKillableData : BaseKillableData
-    {
-        public PlayerKillableData(GameObject coreGameObject) : base(coreGameObject)
-        {
-        }
-    }
-    public class EnemyKillableData : BaseKillableData
-    {
-        public EnemyKillableData(GameObject coreGameObject) : base(coreGameObject)
-        {
         }
     }
 }

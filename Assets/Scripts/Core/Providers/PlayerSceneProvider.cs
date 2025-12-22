@@ -3,13 +3,10 @@ using Utils;
 
 namespace Core.Providers
 {
-    public class PlayerSceneProvider : IPlayerSceneProvider
+    public class PlayerSceneProvider : MonoBehaviour, IPlayerSceneProvider, IPlayerCameraPoint
     {
-        public PlayerSceneProvider(Transform transform)
-        {
-            this.transform = Extensions.AssignWithNullCheck(transform);
-        }
-        private readonly Transform transform;
+        [SerializeField] private  Transform pointToLoockCamera;
         public Transform Transform => transform;
+        public Transform PointToLoockCamera => pointToLoockCamera;
     }
 }

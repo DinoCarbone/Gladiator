@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa294354805f3453198aaeef1eefd819, type: 3}
-  m_Name: DamageDealer
+  m_Name: PlayerDamage
   m_EditorClassIdentifier: Assembly-CSharp::Data.ScriptableObjects.Providers.Interaction.DamageDealerSO
-  radius: 0.3
-  damage: 40
+  radius: 0.35
+  damage: 35
   distance: 1.9
   animationEvent: {fileID: 11400000, guid: 21b373e9222d740eead76b48b3bca6da, type: 2}

@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.States.Lifecycle
     menuName = "ScriptableObjects/States/Lifecycle/EnemyDeath")]
     public class EnemyDeathSO : BehaviorSO<DefautDeath>
     {
+        [SerializeField] private int costKillable = 1;
         public override IState CreateConfigState(List<GameObject> contexts)
         {
            GameObject coreGameObject = null;
@@ -19,7 +20,7 @@ namespace Data.ScriptableObjects.States.Lifecycle
             else
             throw new Exception("EntityDeathSO: CoreGameObject is empty");
 
-            EnemyKillableData enemyKillable = new EnemyKillableData(coreGameObject);
+            EnemyKillableData enemyKillable = new EnemyKillableData(coreGameObject, costKillable);
 
             return new DefautDeath(GetIncompatibleTypes(), enemyKillable);
         }

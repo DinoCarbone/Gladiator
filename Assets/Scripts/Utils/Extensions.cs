@@ -22,6 +22,19 @@ namespace Utils
 
             return value;
         }
+        public static int AssignWithZeroCheck(int value, string parameterName = null)
+        {
+            if (value == 0)
+            {
+                string errorMessage = string.IsNullOrEmpty(parameterName)
+                    ? $"Value cannot be zero (type: int)"
+                    : $"Parameter '{parameterName}' cannot be zero";
+
+                Debug.LogError(errorMessage);
+            }
+
+            return value;
+        }
         public static T GetOrException<T>(this GameObject gameObject) where T : class =>
               gameObject.GetComponents<MonoBehaviour>().FirstOrDefault(b => b is T) as T
               ?? throw new NullReferenceException($"Object of type {typeof(T).Name} not found");
