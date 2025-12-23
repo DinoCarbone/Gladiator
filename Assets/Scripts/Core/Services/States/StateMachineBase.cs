@@ -6,9 +6,11 @@ namespace Core.Services.States
 {
     public abstract class StateMachineBase
     {
-        protected List<IState> currentStates = new List<IState>();
-        protected List<IState> allStates = new List<IState>();
-        protected List<IState> idleStates = new List<IState>();
+        protected List<StateWithType> currentStates = new List<StateWithType>();
+        protected List<StateWithType> allStates = new List<StateWithType>();
+        protected List<StateWithType> idleStates = new List<StateWithType>();
+
+        protected Dictionary<Type, StateCachedData> stateCachedData = new Dictionary<Type, StateCachedData>();
 
         protected Dictionary<Type, StateActionDelegate> enterHandlers = new Dictionary<Type, StateActionDelegate>();
         protected Dictionary<Type, StateActionDelegate> exitHandlers = new Dictionary<Type, StateActionDelegate>();
@@ -21,13 +23,23 @@ namespace Core.Services.States
 
         protected StateMachineBase(List<IState> initialStateList, List<IState> idleStateList, Dictionary<Type, int> priorities = null)
         {
-            allStates = initialStateList ?? throw new ArgumentNullException(nameof(initialStateList));
-            idleStates = idleStateList ?? throw new ArgumentNullException(nameof(idleStateList));
             statePriorities = priorities ?? new Dictionary<Type, int>();
-            // if (allStates.Count == 0 || idleStates.Count == 0)
-            //     throw new ArgumentException("Must have at least one state and one idle state");
 
+            allStates = ConvertToStateWithTypeList(initialStateList ?? throw new ArgumentNullException(nameof(initialStateList)));
+            idleStates = ConvertToStateWithTypeList(idleStateList ?? throw new ArgumentNullException(nameof(idleStateList)));
+
+            CacheStateData();
             RegisterStandardHandlers();
+        }
+
+        private List<StateWithType> ConvertToStateWithTypeList(List<IState> states)
+        {
+            var result = new List<StateWithType>();
+            foreach (var state in states)
+            {
+                result.Add(new StateWithType(state));
+            }
+            return result;
         }
 
         protected virtual void RegisterStandardHandlers()
@@ -57,47 +69,40 @@ namespace Core.Services.States
             getters[typeof(T)] = getter;
         }
 
-        public abstract void Update();
-
-        protected void ExecuteHandler(IState state, Dictionary<Type, StateActionDelegate> handlers)
+        private void CacheStateData()
         {
-            var stateType = state.GetType();
-            foreach (var handlerType in handlers.Keys)
+            CacheStateDataForList(allStates);
+            CacheStateDataForList(idleStates);
+        }
+
+        private void CacheStateDataForList(List<StateWithType> states)
+        {
+            foreach (var stateWithType in states)
             {
-                if (handlerType.IsAssignableFrom(stateType))
+                var type = stateWithType.Type;
+                if (stateCachedData.ContainsKey(type))
+                    continue;
+
+                var data = new StateCachedData();
+                var allTypes = new List<Type>();
+                
+                var currentType = type;
+                while (currentType != null && currentType != typeof(object))
                 {
-                    handlers[handlerType]?.Invoke(state);
+                    allTypes.Add(currentType);
+                    allTypes.AddRange(currentType.GetInterfaces());
+                    currentType = currentType.BaseType;
                 }
+
+                data.AllAssignableTypes = new HashSet<Type>(allTypes);
+
+                data.Priority = GetPriorityUncached(type);
+
+                stateCachedData[type] = data;
             }
         }
 
-        protected bool CheckCondition(IState state, Dictionary<Type, StateConditionDelegate> conditions)
-        {
-            var stateType = state.GetType();
-            foreach (var conditionType in conditions.Keys)
-            {
-                if (conditionType.IsAssignableFrom(stateType))
-                {
-                    return conditions[conditionType]?.Invoke(state) ?? false;
-                }
-            }
-            return false;
-        }
-
-        protected IReadOnlyList<Type> GetIncompatibleTypes(IState state)
-        {
-            var stateType = state.GetType();
-            foreach (var getterType in incompatibleGetters.Keys)
-            {
-                if (getterType.IsAssignableFrom(stateType))
-                {
-                    return incompatibleGetters[getterType]?.Invoke(state) ?? Array.Empty<Type>();
-                }
-            }
-            return Array.Empty<Type>();
-        }
-
-        protected int GetPriority(Type type)
+        private int GetPriorityUncached(Type type)
         {
             foreach (var kvp in statePriorities)
             {
@@ -107,9 +112,79 @@ namespace Core.Services.States
                 }
             }
 
-            // 3. Не нашли
             Debug.LogWarning($"Приоритет не найден для типа: {type.Name}");
             return int.MaxValue;
+        }
+
+        public abstract void Update();
+
+        protected void ExecuteHandler(StateWithType state, Dictionary<Type, StateActionDelegate> handlers)
+        {
+            var cachedData = stateCachedData[state.Type];
+
+            foreach (var handlerType in handlers.Keys)
+            {
+                if (cachedData.AllAssignableTypes.Contains(handlerType))
+                {
+                    handlers[handlerType]?.Invoke(state.State);
+                }
+            }
+        }
+
+        protected bool CheckCondition(StateWithType state, Dictionary<Type, StateConditionDelegate> conditions)
+        {
+            var cachedData = stateCachedData[state.Type];
+
+            foreach (var conditionType in conditions.Keys)
+            {
+                if (cachedData.AllAssignableTypes.Contains(conditionType))
+                {
+                    return conditions[conditionType]?.Invoke(state.State) ?? false;
+                }
+            }
+            return false;
+        }
+
+        protected IReadOnlyList<Type> GetIncompatibleTypes(StateWithType state)
+        {
+            var cachedData = stateCachedData[state.Type];
+
+            foreach (var getterType in incompatibleGetters.Keys)
+            {
+                if (cachedData.AllAssignableTypes.Contains(getterType))
+                {
+                    return incompatibleGetters[getterType]?.Invoke(state.State) ?? Array.Empty<Type>();
+                }
+            }
+            return Array.Empty<Type>();
+        }
+
+        protected int GetPriority(StateWithType state)
+        {
+            return stateCachedData.TryGetValue(state.Type, out var data) ? data.Priority : int.MaxValue;
+        }
+
+        protected int GetPriority(Type type)
+        {
+            return stateCachedData.TryGetValue(type, out var data) ? data.Priority : int.MaxValue;
+        }
+
+        protected class StateWithType
+        {
+            public IState State { get; }
+            public Type Type { get; }
+
+            public StateWithType(IState state)
+            {
+                State = state;
+                Type = state.GetType(); 
+            }
+        }
+        
+        protected class StateCachedData
+        {
+            public HashSet<Type> AllAssignableTypes;
+            public int Priority;
         }
     }
 }

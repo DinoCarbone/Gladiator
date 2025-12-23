@@ -38,10 +38,10 @@ namespace Core.Behaviors.Lifecycle
             if (activeEnemies.Contains(gameObject))
             {
                 activeEnemies.Remove(gameObject);
-                UnityEngine.Object.Destroy(gameObject);
             }
-            else
-            Debug.LogError("Enemy not found");
+            else Debug.LogWarning("Enemy not found");
+            
+            UnityEngine.Object.Destroy(gameObject);
         }
         public void Spawn()
         {

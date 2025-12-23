@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Core.Services.States
 {
     public class StateMachine : StateMachineBase
     {
-        private List<IState> statesToAdd = new List<IState>();
-        private List<IState> statesToRemove = new List<IState>();
+        private List<StateWithType> statesToAdd = new List<StateWithType>();
+        private List<StateWithType> statesToRemove = new List<StateWithType>();
         private bool isProcessing = false;
-        private HashSet<IState> exitingStates = new HashSet<IState>();
+        private HashSet<StateWithType> exitingStates = new HashSet<StateWithType>();
 
         // Чтобы не создавать новые списки и не засорять GC
-        private List<IState> cachedTempList = new List<IState>();
+        private List<StateWithType> cachedTempList = new List<StateWithType>();
+        private Dictionary<Type, IReadOnlyList<Type>> incompatibleTypesCache = new Dictionary<Type, IReadOnlyList<Type>>();
 
         public StateMachine(
             List<IState> initialStateList,
@@ -47,7 +47,6 @@ namespace Core.Services.States
 
         private void UpdateCurrentStates()
         {
-            // Используем кешированный список для безопасной итерации
             cachedTempList.Clear();
             cachedTempList.AddRange(currentStates);
 
@@ -62,7 +61,6 @@ namespace Core.Services.States
 
         private void ProcessExits()
         {
-            // Итерируем в обратном порядке
             for (int i = currentStates.Count - 1; i >= 0; i--)
             {
                 var state = currentStates[i];
@@ -84,12 +82,10 @@ namespace Core.Services.States
 
         private void ProcessNewStates()
         {
-            // Собираем кандидатов в кешированный список
             cachedTempList.Clear();
 
             foreach (var state in allStates)
             {
-                // Быстрая проверка через Contains
                 if (currentStates.Contains(state) || exitingStates.Contains(state) || statesToAdd.Contains(state))
                     continue;
 
@@ -99,8 +95,8 @@ namespace Core.Services.States
                 cachedTempList.Add(state);
             }
 
-            // Сортируем по приоритету (высший по списку последний)
-            cachedTempList.Sort((b, a) => GetPriority(b.GetType()).CompareTo(GetPriority(a.GetType())));
+            // Сортируем по приоритету (высший по списку первый)
+            cachedTempList.Sort((a, b) => GetPriority(a).CompareTo(GetPriority(b)));
 
             // Обрабатываем кандидатов
             for (int i = 0; i < cachedTempList.Count; i++)
@@ -117,11 +113,10 @@ namespace Core.Services.States
             }
         }
 
-        private bool CanAddState(IState newState)
+        private bool CanAddState(StateWithType newState)
         {
-            var newStateType = newState.GetType();
-            int newStatePriority = GetPriority(newStateType);
-            var newStateIncompatible = GetIncompatibleTypes(newState);
+            int newStatePriority = GetPriority(newState);
+            var newStateIncompatible = GetCachedIncompatibleTypes(newState);
 
             // Проверяем текущие состояния (которые не будут удалены)
             for (int i = 0; i < currentStates.Count; i++)
@@ -132,7 +127,7 @@ namespace Core.Services.States
                 if (statesToRemove.Contains(activeState))
                     continue;
 
-                if (CheckStateConflict(activeState, newState, newStateType, newStatePriority, newStateIncompatible))
+                if (CheckStateConflict(activeState, newState, newStatePriority, newStateIncompatible))
                     return false;
             }
 
@@ -142,43 +137,55 @@ namespace Core.Services.States
                 if (pendingState == newState)
                     continue;
 
-                if (CheckStateConflict(pendingState, newState, newStateType, newStatePriority, newStateIncompatible))
+                if (CheckStateConflict(pendingState, newState, newStatePriority, newStateIncompatible))
                     return false;
             }
-            // Проверяем состояния, которые будут добавлены (кроме самого newState)
 
             return true;
         }
 
-        private bool CheckStateConflict(IState existingState, IState newState, Type newStateType, int newStatePriority, IReadOnlyList<Type> newStateIncompatible)
+        private IReadOnlyList<Type> GetCachedIncompatibleTypes(StateWithType state)
         {
-            var existingType = existingState.GetType();
+            var stateType = state.Type;
+            if (!incompatibleTypesCache.TryGetValue(stateType, out var incompatibleTypes))
+            {
+                incompatibleTypes = GetIncompatibleTypes(state);
+                incompatibleTypesCache[stateType] = incompatibleTypes;
+            }
+            return incompatibleTypes;
+        }
+
+        private bool CheckStateConflict(StateWithType existingState, StateWithType newState, int newStatePriority, IReadOnlyList<Type> newStateIncompatible)
+        {
+            var existingCachedData = stateCachedData[existingState.Type];
 
             // 1. Проверяем, несовместимо ли новое состояние с существующим
             for (int i = 0; i < newStateIncompatible.Count; i++)
             {
-                if (newStateIncompatible[i].IsAssignableFrom(existingType))
+                if (existingCachedData.AllAssignableTypes.Contains(newStateIncompatible[i]))
                 {
-                    return HandleConflict(existingState, existingType, newStateType, newStatePriority);
+                    return HandleConflict(existingState, newState, newStatePriority);
                 }
             }
 
             // 2. Проверяем, несовместимо ли существующее состояние с новым
-            var existingIncompatible = GetIncompatibleTypes(existingState);
+            var existingIncompatible = GetCachedIncompatibleTypes(existingState);
+            var newCachedData = stateCachedData[newState.Type];
+            
             for (int i = 0; i < existingIncompatible.Count; i++)
             {
-                if (existingIncompatible[i].IsAssignableFrom(newStateType))
+                if (newCachedData.AllAssignableTypes.Contains(existingIncompatible[i]))
                 {
-                    return HandleConflict(existingState, existingType, newStateType, newStatePriority);
+                    return HandleConflict(existingState, newState, newStatePriority);
                 }
             }
 
             return false; // Конфликта нет
         }
 
-        private bool HandleConflict(IState conflictingState, Type conflictingType, Type newStateType, int newStatePriority)
+        private bool HandleConflict(StateWithType conflictingState, StateWithType newState, int newStatePriority)
         {
-            int conflictingPriority = GetPriority(conflictingType);
+            int conflictingPriority = GetPriority(conflictingState);
 
             // Существующее состояние имеет ВЫСШИЙ приоритет - новый не может быть добавлен
             if (conflictingPriority < newStatePriority)
@@ -202,11 +209,9 @@ namespace Core.Services.States
 
         private void EnsureActiveStates()
         {
-            // Используем кешированный список для расчета будущих состояний
             cachedTempList.Clear();
             cachedTempList.AddRange(currentStates);
 
-            // Удаляем состояния, которые будут удалены
             for (int i = cachedTempList.Count - 1; i >= 0; i--)
             {
                 if (statesToRemove.Contains(cachedTempList[i]))
@@ -215,7 +220,6 @@ namespace Core.Services.States
                 }
             }
 
-            // Добавляем состояния, которые будут добавлены
             for (int i = 0; i < statesToAdd.Count; i++)
             {
                 var state = statesToAdd[i];
@@ -245,7 +249,6 @@ namespace Core.Services.States
 
         private void ApplyPendingChanges()
         {
-            // Удаляем состояния (итерируем в обратном порядке для эффективности)
             for (int i = statesToRemove.Count - 1; i >= 0; i--)
             {
                 currentStates.Remove(statesToRemove[i]);
@@ -267,8 +270,7 @@ namespace Core.Services.States
             for (int i = 0; i < currentStates.Count; i++)
             {
                 var state = currentStates[i];
-                var type = state.GetType();
-                Debug.Log($"  - {type.Name} (Priority: {GetPriority(type)})");
+                Debug.Log($"  - {state.Type.Name} (Priority: {GetPriority(state)})");
             }
         }
     }
