@@ -12,6 +12,7 @@ namespace Data.ScriptableObjects.Providers.Input
         [SerializeField] private float rotationThreshold = 0.1f;
         public override IProvider CreateProvider(List<GameObject> _)
         {
+            /// <summary>Создаёт провайдер вращения оси с указанным порогом.</summary>
             return new InputAxisRotationProvider(rotationThreshold);
         }
     }

@@ -10,15 +10,24 @@ using Data.ScriptableObjects.States;
 
 namespace Core.Behaviors.Entities
 {
+    /// <summary>
+    /// Базовый компонент сущности: собирает состояния и провайдеры из ScriptableObject-частей,
+    /// создаёт StateMachine и выполняет инъекцию зависимостей через <see cref="IHybridInjectService"/>.
+    /// </summary>
     public class EntityBase : MonoBehaviour
     {
         [SerializeField] private PriorityBehaviorsSO priorityBehaviorsSO;
         [SerializeField] private List<EntityDataPart> entityDatas = new List<EntityDataPart>();
         [SerializeField] private List<ProviderDataPart> providersSO = new List<ProviderDataPart>();
+
         private List<IState> entityStates;
         private List<Providers.IProvider> providers;
         private StateMachine stateMachine;
 
+        /// <summary>
+        /// Инжектирует сервисы и выполняет инициализацию состояний и провайдеров.
+        /// </summary>
+        /// <param name="hybridInjectService">Сервис, отвечающий за инъекции зависимостей.</param>
         [Inject]
         private void Construct(IHybridInjectService hybridInjectService)
         {
@@ -26,6 +35,8 @@ namespace Core.Behaviors.Entities
             InitializeProviders();
             InjectServices(hybridInjectService);
         }
+
+        /// <summary>Освобождает созданные состояния и провайдеры при уничтожении объекта.</summary>
         void OnDestroy()
         {
             if (entityStates != null)
@@ -35,6 +46,7 @@ namespace Core.Behaviors.Entities
                     if (state is IDisposable disposable) disposable.Dispose();
                 }
             }
+
             if (providers != null)
             {
                 foreach (Providers.IProvider provider in providers)
@@ -42,27 +54,37 @@ namespace Core.Behaviors.Entities
                     if (provider is IDisposable disposable) disposable.Dispose();
                 }
             }
+
             stateMachine = null;
             entityStates = null;
             providers = null;
         }
+
+        /// <summary>
+        /// Создаёт список состояний на основе настроек <see cref="entityDatas"/> и инициализирует StateMachine.
+        /// </summary>
         private void InitializeStates()
         {
             entityStates = new List<IState>();
             List<IState> defaultStates = new List<IState>();
+
             foreach (EntityDataPart dataPart in entityDatas)
             {
                 IState state = dataPart.behaviorSO.CreateConfigState(dataPart.contexts);
 
-                if(!Extensions.ContainsType(entityStates, state)) entityStates.Add(state);
+                if (!Extensions.ContainsType(entityStates, state)) entityStates.Add(state);
                 else Debug.LogError("Behavior type already exists");
 
                 if (dataPart.isDefaultState) defaultStates.Add(state);
             }
+
             Extensions.AssignWithNullCheck(priorityBehaviorsSO);
             stateMachine = new StateMachine(entityStates, defaultStates, priorityBehaviorsSO.GetPriorityTypes());
-
         }
+
+        /// <summary>
+        /// Создаёт провайдеры, описанные в <see cref="providersSO"/>.
+        /// </summary>
         private void InitializeProviders()
         {
             providers = new List<Providers.IProvider>();
@@ -70,10 +92,15 @@ namespace Core.Behaviors.Entities
             {
                 Providers.IProvider provider = providerData.providerSO.CreateProvider(providerData.contexts);
 
-                if(!Extensions.ContainsType(providers, provider)) providers.Add(provider);
+                if (!Extensions.ContainsType(providers, provider)) providers.Add(provider);
                 else Debug.LogError("Provider type already exists");
             }
         }
+
+        /// <summary>
+        /// Подготавливает объекты для инъекции и передаёт их в <see cref="IHybridInjectService.InjectAll"/>.
+        /// </summary>
+        /// <param name="hybridInjectService">Сервис инъекции зависимостей.</param>
         private void InjectServices(IHybridInjectService hybridInjectService)
         {
             List<object> statesAsObjects = new List<object>(entityStates);
@@ -84,9 +111,11 @@ namespace Core.Behaviors.Entities
 
             AllEntityData allEntityData = new AllEntityData(statesAsObjects);
             statesAsObjects.Add(allEntityData);
-            
+
             hybridInjectService.InjectAll(statesAsObjects);
         }
+
+        /// <summary>Вызван каждый кадр — проксирует обновление в StateMachine.</summary>
         void Update()
         {
             stateMachine.Update();

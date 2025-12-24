@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.Providers.Input
     {
         public override IProvider CreateProvider(List<GameObject> contexts)
         {
+            /// <summary>Создаёт провайдер ввода атаки (для десктоп/мобильной адаптации).</summary>
             return new InputAttackProvider();
         }
     }

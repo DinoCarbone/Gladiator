@@ -9,11 +9,22 @@ namespace Core.Behaviors.States.Movement
         protected float speed = 5f;
         protected CharacterController controller;
 
+        /// <summary>
+        /// Конструктор состояния движения на основе <see cref="CharacterController"/>.
+        /// </summary>
+        /// <param name="controller">Контроллер персонажа, используемый для перемещения.</param>
+        /// <param name="incompatibleStates">Список несовместимых типов состояний.</param>
+        /// <param name="startSpeed">Начальная скорость движения.</param>
         public CharacterControllerMovementState(CharacterController controller, List<Type> incompatibleStates, float startSpeed = 5f) : base(incompatibleStates)
         {
             speed = startSpeed;
             this.controller = Utils.Extensions.AssignWithNullCheck(controller);
         }
+
+        /// <summary>
+        /// Обрабатывает движение персонажа по заданной оси.
+        /// </summary>
+        /// <param name="axis">Вектор входного осевого управления.</param>
         protected override void OnMove(Vector2 axis)
         {
             // Движение вперед/назад относительно вращения

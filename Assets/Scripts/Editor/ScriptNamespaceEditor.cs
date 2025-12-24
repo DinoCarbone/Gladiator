@@ -10,11 +10,13 @@ namespace EditorTools
     {
         private static string currentFolderPath;
 
+        /// <summary>Статический конструктор — подписывается на событие отрисовки элементов окна проекта.</summary>
         static ScriptNamespaceEditor()
         {
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemGUI;
         }
 
+        /// <summary>Отслеживает выбранную в Project папку, чтобы затем определять namespace для новых скриптов.</summary>
         private static void OnProjectWindowItemGUI(string guid, Rect selectionRect)
         {
             // Получаем путь к текущей выделенной папке
@@ -28,6 +30,8 @@ namespace EditorTools
             }
         }
 
+        /// <summary>Вызывается при создании ассета: если создаётся .cs файл, добавляет namespace по пути.</summary>
+        /// <param name="assetPath">Путь ассета (с расширением .meta при событии).</param>
         private static void OnWillCreateAsset(string assetPath)
         {
             if (!assetPath.EndsWith(".cs.meta"))
@@ -48,6 +52,7 @@ namespace EditorTools
             }
         }
 
+        /// <summary>Строит namespace на основе пути файла относительно Assets.</summary>
         private static string GetNamespaceFromPath(string path)
         {
             string relativePath = path.Replace("Assets/", "").Replace(".cs", "");
@@ -71,6 +76,7 @@ namespace EditorTools
             return namespaceName;
         }
 
+        /// <summary>Форматирует часть namespace: убирает спецсимволы и делает PascalCase.</summary>
         private static string FormatNamespacePart(string folderName)
         {
             // Убираем специальные символы и делаем CamelCase
@@ -82,6 +88,7 @@ namespace EditorTools
             return formatted;
         }
 
+        /// <summary>Встраивает блок namespace в текст скрипта, сохраняя импорты и корректные отступы.</summary>
         private static string AddNamespaceToScript(string content, string namespaceName)
         {
             // Находим индекс начала класса
@@ -116,6 +123,7 @@ namespace {namespaceName}
         }
 
         // Вспомогательный метод для добавления отступов
+        /// <summary>Добавляет отступы к каждой непустой строке текста.</summary>
         private static string AddIndentation(string text, int indentLevel)
         {
             string indent = new string(' ', indentLevel);

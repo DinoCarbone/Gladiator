@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.Providers.Input
     {
         public override IProvider CreateProvider(List<GameObject> _)
         {
+            /// <summary>Создаёт провайдер для осевого движения (на основе `IMovementInput`).</summary>
             return new InputAxisMovementProvider();
         }
     }

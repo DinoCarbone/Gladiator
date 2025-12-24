@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.Providers.UI
     {
         public override IProvider CreateProvider(List<GameObject> _)
         {
+            /// <summary>Создаёт провайдер отображения здоровья игрока.</summary>
             return new PlayerHealthViewUpdater();
         }
     }

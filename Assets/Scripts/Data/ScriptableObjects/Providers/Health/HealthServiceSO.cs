@@ -12,6 +12,7 @@ namespace Data.ScriptableObjects.Providers.Health
         [SerializeField] private int maxHealth = 100;
         public override IProvider CreateProvider(List<GameObject> _)
         {
+            /// <summary>Создаёт сервис здоровья с заданным максимумом.</summary>
             return new HealthService(maxHealth);
         }
     }

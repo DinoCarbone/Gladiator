@@ -10,6 +10,11 @@ namespace Data.ScriptableObjects.States.Movement
     public class TransformRotationBehaviorSO : BehaviorSO<TransformRotation>
     {
         [SerializeField] private float speed = 10f;
+        /// <summary>
+        /// Создаёт состояние поворота трансформа по найденному Transform в контекстах.
+        /// </summary>
+        /// <param name="contexts">Список объектов-контекстов для поиска Transform.</param>
+        /// <returns>Экземпляр состояния поворота.</returns>
         public override IState CreateConfigState(List<GameObject> contexts)
         {
             Transform rootTransform = null;
@@ -25,6 +30,7 @@ namespace Data.ScriptableObjects.States.Movement
             return new TransformRotation(GetIncompatibleTypes(), rootTransform, speed);
         }
 
+        /// <summary>Возвращает базовый тип поведения (вращение), совместимый с данным SO.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseRotation);

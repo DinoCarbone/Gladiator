@@ -10,6 +10,9 @@ namespace Core.Services
     public class TickableService : ITickableService, ITickable
     {
         public event Action OnTick;
+        /// <summary>
+        /// Вызывает событие тика, подписчики будут уведомлены.
+        /// </summary>
         public void Tick() => OnTick?.Invoke();
     }
 }

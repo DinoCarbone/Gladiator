@@ -18,6 +18,7 @@ namespace Data.ScriptableObjects.States.Movement
             return new BaseMovement(null);
         }
 
+        /// <summary>Возвращает базовый тип для состояний движения.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseMovement);

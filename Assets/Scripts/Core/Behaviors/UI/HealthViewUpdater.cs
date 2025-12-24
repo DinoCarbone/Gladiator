@@ -4,6 +4,9 @@ using Zenject;
 
 namespace Core.Behaviors.UI
 {
+    /// <summary>
+    /// Провайдер визуального обновления здоровья: синхронизирует <see cref="IValueDisplay"/> с данным <see cref="IHealthService"/>.
+    /// </summary>
     public class HealthViewUpdater : Providers.IProvider, IHealthViewUpdater
     {
         private readonly IValueDisplay valueDisplay;
@@ -14,6 +17,7 @@ namespace Core.Behaviors.UI
             this.valueDisplay = Extensions.AssignWithNullCheck(valueDisplay);
         }
 
+        /// <summary>Инъекция сервиса здоровья и первичная инициализация отображения.</summary>
         [Inject]
         public void Construct(IHealthService healthProvider)
         {
@@ -24,18 +28,23 @@ namespace Core.Behaviors.UI
 
             Subscribe();
         }
+
         private void Subscribe()
         {
             healthProvider.OnChangeHealth += OnChangeHealth;
         }
+
         private void Unsubscribe()
         {
             healthProvider.OnChangeHealth -= OnChangeHealth;
         }
+
         private void OnChangeHealth(int health)
         {
             valueDisplay.DisplayValue(health);
         }
+
+        /// <summary>Освобождает подписки и очищает ссылку на провайдер здоровья.</summary>
         public void Dispose()
         {
             Unsubscribe();

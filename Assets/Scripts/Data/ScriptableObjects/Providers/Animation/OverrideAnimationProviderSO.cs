@@ -11,7 +11,10 @@ namespace Data.ScriptableObjects.Providers.Animation
     {
         [SerializeField] private AnimationProviderSOBase animationProviderSO;
         [SerializeField] private List<AnimationSerializeClipData> clipDatas;
-
+        /// <summary>
+        /// Возвращает список состояний анимации с заменёнными клипами из `clipDatas`.
+        /// Если для состояния не найден override, используется базовая конфигурация.
+        /// </summary>
         public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()
         {
             // Получаем базовые состояния из оригинального провайдера

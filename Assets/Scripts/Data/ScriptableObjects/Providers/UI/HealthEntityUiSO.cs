@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.Providers.UI
       menuName = "ScriptableObjects/Providers/UI/HealthEntity")]
     public class HealthEntityUiSO : BaseProviderSO
     {
+        /// <summary>Создаёт визуализацию здоровья (`HealthViewUpdater`) на основе найденного `Image`.</summary>
         public override IProvider CreateProvider(List<GameObject> contexts)
         {
             Image barImage = null;
@@ -18,10 +19,11 @@ namespace Data.ScriptableObjects.Providers.UI
             foreach (GameObject context in contexts)
             {
                 if (context.TryGetComponent(out barImage)) 
-                break;
+                    break;
             }
             if(barImage == null)
-            throw new Exception("HealthEntityUI: barImage is empty");
+                throw new Exception("HealthEntityUI: barImage is empty");
+
             IValueDisplay valueDisplay = new ImageValueDisplay(barImage);
             return new HealthViewUpdater(valueDisplay);
         }

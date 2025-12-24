@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
     {
         public override IProvider CreateProvider(List<GameObject> _)
         {
+            /// <summary>Создаёт маршрутизатор событий (EventRouter) для взаимодействий.</summary>
             return new EventRouter();
         }
     }

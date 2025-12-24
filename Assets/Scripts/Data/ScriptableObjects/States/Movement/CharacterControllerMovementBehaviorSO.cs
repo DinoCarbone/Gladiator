@@ -12,6 +12,11 @@ namespace Data.ScriptableObjects.States.Movement
     {
         [SerializeField] private float moveSpeed = 5f;
         
+        /// <summary>
+        /// Создаёт конфигурируемое состояние движения на основе найденного компонента <see cref="CharacterController"/> в контекстах.
+        /// </summary>
+        /// <param name="contexts">Список объектов-контекстов, среди которых ищется необходимый компонент.</param>
+        /// <returns>Экземпляр <see cref="IState"/> для данного поведения.</returns>
         public override IState CreateConfigState(List<GameObject> contexts)
         {
             CharacterController controller = null;
@@ -27,6 +32,7 @@ namespace Data.ScriptableObjects.States.Movement
             return new CharacterControllerMovementState(controller ,GetIncompatibleTypes(), moveSpeed);
         }
 
+        /// <summary>Возвращает базовый тип поведения, с которым совместимо это ScriptableObject.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseMovement);

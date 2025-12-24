@@ -7,14 +7,23 @@ namespace Core.Behaviors.Health
 {
     public class HealthService : IInternalEventReceiver, IDamageProvider, IHealthService, IDeathProvider
     {
-        public int Health {get; private set;}
+        /// <summary>Текущее здоровье.</summary>
+        public int Health { get; private set; }
 
-        public int MaxHealth {get; private set;}
+        /// <summary>Максимальное здоровье.</summary>
+        public int MaxHealth { get; private set; }
 
+        /// <summary>Событие при получении урона (возвращает величину урона).</summary>
         public event Action<int> OnTakeDamage;
+
+        /// <summary>Событие при изменении здоровья (возвращает текущее здоровье).</summary>
         public event Action<int> OnChangeHealth;
+
+        /// <summary>Событие при смерти (health <= 0).</summary>
         public event Action OnDie;
 
+        /// <summary>Создаёт сервис здоровья с указанным максимумом.</summary>
+        /// <param name="maxHealth">Максимальное здоровье.</param>
         public HealthService(int maxHealth)
         {
             MaxHealth = maxHealth;

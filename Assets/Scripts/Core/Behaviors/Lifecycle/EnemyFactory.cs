@@ -4,6 +4,9 @@ using Utils;
 
 namespace Core.Behaviors.Lifecycle
 {
+    /// <summary>
+    /// Фабрика создания врагов с использованием Zenject контейнера.
+    /// </summary>
     public class EnemyFactory : IEnemyFactory
     {
         private readonly DiContainer container;
@@ -17,6 +20,7 @@ namespace Core.Behaviors.Lifecycle
             this.spawnPoint = spawnPoint;
         }
 
+        /// <summary>Создаёт новый объект врага в точке спавна через DiContainer.</summary>
         public GameObject Create()
         {
             var enemy = container.InstantiatePrefab(

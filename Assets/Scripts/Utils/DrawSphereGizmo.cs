@@ -6,7 +6,9 @@ namespace Utils
     {
         [SerializeField] private float radius = 1f;
         [SerializeField] private Color color = Color.red;
-
+        /// <summary>
+        /// Рисует в сцене отладочную окружность заданного радиуса и цвета.
+        /// </summary>
         void OnDrawGizmos()
         {
             Gizmos.color = color;

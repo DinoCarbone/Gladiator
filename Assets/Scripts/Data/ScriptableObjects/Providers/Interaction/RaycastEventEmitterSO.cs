@@ -12,6 +12,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
     {
         public override IProvider CreateProvider(List<GameObject> contexts)
         {
+            /// <summary>Создаёт `RaycastEventEmitter` для указанного источника (Transform) в контекстах.</summary>
             Transform transformObject = null;
 
             foreach (GameObject context in contexts)

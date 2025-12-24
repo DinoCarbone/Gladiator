@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Core.Services.States
 {
+    /// <summary>
+    /// Базовый класс для машин состояний. Обеспечивает хранение и кэширование метаданных состояний,
+    /// регистрацию стандартных обработчиков входа/выхода/обновления и логику приоритетов.
+    /// </summary>
     public abstract class StateMachineBase
     {
         protected List<StateWithType> currentStates = new List<StateWithType>();

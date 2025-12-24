@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Core.Services.States
 {
+    /// <summary>
+    /// Реализация машины состояний с приоритетами, отложенными изменениями и кешированием несовместимостей.
+    /// </summary>
     public class StateMachine : StateMachineBase
     {
         private List<StateWithType> statesToAdd = new List<StateWithType>();
@@ -15,6 +18,12 @@ namespace Core.Services.States
         private List<StateWithType> cachedTempList = new List<StateWithType>();
         private Dictionary<Type, IReadOnlyList<Type>> incompatibleTypesCache = new Dictionary<Type, IReadOnlyList<Type>>();
 
+        /// <summary>
+        /// Создаёт машину состояний.
+        /// </summary>
+        /// <param name="initialStateList">Список начальных состояний.</param>
+        /// <param name="idleStateList">Список idle-состояний.</param>
+        /// <param name="priorities">Словарь приоритетов по типу состояния.</param>
         public StateMachine(
             List<IState> initialStateList,
             List<IState> idleStateList,
@@ -23,6 +32,10 @@ namespace Core.Services.States
         {
         }
 
+        /// <summary>
+        /// Основной цикл машины состояний: обрабатывает выходы, обновляет активные состояния,
+        /// проверяет входы и применяет отложенные изменения.
+        /// </summary>
         public override void Update()
         {
             if (isProcessing) return;

@@ -6,12 +6,18 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Agents
 {
+    /// <summary>
+    /// ScriptableObject-конфиг для создания `EnemyAgent` провайдера.
+    /// Хранит параметры атаки (угол, дистанция) и создаёт провайдер по контекстам.
+    /// </summary>
     [CreateAssetMenu(fileName = "EnemyAgent",
       menuName = "ScriptableObjects/Providers/Agets/EnemyAgent")]
     public class EnemyAgentSO : BaseProviderSO
     {
         [SerializeField] private float attackAngleThreshold = 30f;
         [SerializeField] private float attackDistance = 1.7f;
+
+        /// <summary>Создаёт провайдер агента по списку контекстов (ищет Transform).</summary>
         public override IProvider CreateProvider(List<GameObject> contexts)
         {
              Transform transform = null;
@@ -22,9 +28,9 @@ namespace Data.ScriptableObjects.Providers.Agents
                     break;
             }
             if (transform == null)
-                throw new Exception($"EnemyAgetnSO: Transform is empty");
+                throw new Exception($"EnemyAgentSO: Transform is empty");
 
-            return new EnemyAgetn(transform, attackAngleThreshold, attackDistance);
+            return new EnemyAgent(transform, attackAngleThreshold, attackDistance);
         }
     }
 }

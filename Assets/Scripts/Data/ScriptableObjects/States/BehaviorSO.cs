@@ -11,6 +11,7 @@ namespace Data.ScriptableObjects.States
 
         protected List<Type> GetIncompatibleTypes()
         {
+            /// <summary>Составляет список типов несовместимых поведений, указанных в `incompatibleStates`.</summary>
             List<Type> types = new List<Type>();
             foreach (var state in incompatibleStates)
             {

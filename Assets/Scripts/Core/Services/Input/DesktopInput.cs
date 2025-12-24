@@ -4,6 +4,10 @@ using Zenject;
 
 namespace Core.Services.Input
 {
+    /// <summary>
+    /// Реализация ввода для десктопа: клавиши WASD/стрелки, мышь и кнопка атаки.
+    /// Вызывает события при изменении осей и нажатии/отпускании атаки.
+    /// </summary>
     public class DesktopInput : ITickable, IMovementInput, IMouseLookInput, IAttackInput
     {
         private const float PressThreshold = 0.5f;
@@ -16,15 +20,30 @@ namespace Core.Services.Input
 
         private bool isAttackThisFrame = false;
 
+        /// <summary>Флаг, указывающий, обрабатывается ли текущее движение.</summary>
         public bool IsHandle { get; private set; }
+
+        /// <summary>Текущее значение оси движения.</summary>
         public Vector2 Axis { get; private set; }
+
+        /// <summary>Возвращает true, если атака произошла в этом кадре.</summary>
         public bool IsAttack => isAttackThisFrame;
 
+        /// <summary>Событие при изменении оси движения.</summary>
         public event Action<Vector2> OnMovementAxisChanged;
+
+        /// <summary>Событие при изменении оси взгляда (мышь).</summary>
         public event Action<Vector2> OnLookAxisChanged;
+
+        /// <summary>Событие при отпускании кнопки атаки.</summary>
         public event Action OnFireReleased;
+
+        /// <summary>Событие при нажатии кнопки атаки.</summary>
         public event Action OnFirePressed;
 
+        /// <summary>
+        /// Вызывается каждый кадр контейнером Zenject (ITickable). Считывает ввод и вызывает соответствующие события.
+        /// </summary>
         public void Tick()
         {
             Vector2 newMovementAxis = new Vector2(

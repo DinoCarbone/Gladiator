@@ -18,6 +18,7 @@ namespace Data.ScriptableObjects.States.Movement
             return new BaseIdle(null);
         }
 
+        /// <summary>Возвращает базовый тип для idle-состояний.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseIdle);

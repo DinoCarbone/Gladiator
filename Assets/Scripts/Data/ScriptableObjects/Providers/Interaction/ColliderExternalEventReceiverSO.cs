@@ -10,6 +10,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
       menuName = "ScriptableObjects/Providers/Interactions/ColliderExternalEventReceiver")]
     public class ColliderExternalEventReceiverSO : BaseProviderSO
     {
+        /// <summary>Создаёт или возвращает существующий `ColliderExternalEventReceiver` на Collider из контекстов.</summary>
         public override IProvider CreateProvider(List<GameObject> contexts)
         {
             Collider controller = null;
@@ -17,10 +18,10 @@ namespace Data.ScriptableObjects.Providers.Interaction
             foreach (GameObject context in contexts)
             {
                 if (context.TryGetComponent(out controller)) 
-                break;
+                    break;
             }
             if(controller == null)
-            throw new Exception("ColliderExternalEventReceiverSO: collider is empty");
+                throw new Exception("ColliderExternalEventReceiverSO: collider is empty");
 
             ColliderExternalEventReceiver colliderExternalEventReceiver;
 
