@@ -11,7 +11,8 @@ namespace Data.ScriptableObjects.States.Lifecycle
     menuName = "ScriptableObjects/States/Lifecycle/EnemyDeath")]
     public class EnemyDeathSO : BehaviorSO<DefautDeath>
     {
-        [SerializeField] private int costKillable = 1;
+        [SerializeField, Tooltip("Points awarded for killing this enemy.")]
+        private int costKillable = 1;
         /// <summary>Создаёт конфигурацию смерти врага с указанием стоимости и core GameObject.</summary>
         public override IState CreateConfigState(List<GameObject> contexts)
         {

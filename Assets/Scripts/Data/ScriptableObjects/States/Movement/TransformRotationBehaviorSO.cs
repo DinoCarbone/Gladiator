@@ -9,7 +9,8 @@ namespace Data.ScriptableObjects.States.Movement
     [CreateAssetMenu(fileName = "TransformRotationBehavior", menuName = "ScriptableObjects/States/Movement/TransformRotationBehavior")]
     public class TransformRotationBehaviorSO : BehaviorSO<TransformRotation>
     {
-        [SerializeField] private float speed = 10f;
+        [SerializeField, Tooltip("Rotation speed applied to the transform.")]
+        private float speed = 10f;
         /// <summary>
         /// Создаёт состояние поворота трансформа по найденному Transform в контекстах.
         /// </summary>

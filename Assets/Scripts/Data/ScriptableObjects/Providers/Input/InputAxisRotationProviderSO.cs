@@ -9,7 +9,8 @@ namespace Data.ScriptableObjects.Providers.Input
     menuName = "ScriptableObjects/Providers/Input/InputAxisRotationProvider")]
     public class InputAxisRotationProviderSO : BaseProviderSO
     {
-        [SerializeField] private float rotationThreshold = 0.1f;
+        [SerializeField, Tooltip("Rotation input threshold to consider as movement.")]
+        private float rotationThreshold = 0.1f;
         public override IProvider CreateProvider(List<GameObject> _)
         {
             /// <summary>Создаёт провайдер вращения оси с указанным порогом.</summary>

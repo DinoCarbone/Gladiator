@@ -10,7 +10,8 @@ namespace Data.ScriptableObjects.Providers.Animation
       menuName = "ScriptableObjects/Providers/Animations/AnimationProvider")]
     public class AnimationProviderSO : AnimationProviderSOBase
     {
-        [SerializeField] private List<AnimationSerializeTypeData> animationSerializeTypeDatas;
+        [SerializeField, Tooltip("Serialized animation state to behavior mappings.")]
+        private List<AnimationSerializeTypeData> animationSerializeTypeDatas;
 
         /// <summary>Возвращает конфигурацию состояний анимации на основе сериализованных данных.</summary>
         public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()

@@ -1096,6 +1096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 913976680}
   - component: {fileID: 913976679}
+  - component: {fileID: 913976682}
   - component: {fileID: 913976681}
   m_Layer: 0
   m_Name: SceneContext
@@ -1119,6 +1120,7 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 913976681}
+  - {fileID: 913976682}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -1160,9 +1162,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 913976678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9bf69aa77a5c4b9f86aaa979f7fdbd3, type: 3}
+  m_Script: {fileID: 11500000, guid: 9034110abf7944bb285b3a905e4b1c5f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.Services.DI.ServicesInstaller
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Services.DI.CommonServicesInstaller
+--- !u!114 &913976682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913976678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f273eec672f644f1cb74bd1762e82783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Services.DI.SceneServicesInstaller
   cinemachineCamera: {fileID: 622816754}
   playerHealthBar: {fileID: 628880196}
   playerPrefub: {fileID: 7274208349336419681, guid: 3ccfb68c4ffaa4b09b86a8741d13bd85, type: 3}

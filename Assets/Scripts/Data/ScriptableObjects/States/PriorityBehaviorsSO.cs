@@ -10,7 +10,8 @@ namespace Data.ScriptableObjects.States
     [CreateAssetMenu(fileName = "PriorityStates", menuName = "ScriptableObjects/PriorityStates")]
     public class PriorityBehaviorsSO : ScriptableObject
     {
-        [SerializeField] private List<BaseBehaviorSO> behaviorPriorities;
+        [SerializeField, Tooltip("Ordered list of behavior ScriptableObjects by priority (higher index = higher priority).")]
+        private List<BaseBehaviorSO> behaviorPriorities;
 
         public Dictionary<Type, int> GetPriorityTypes()
         {

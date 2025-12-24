@@ -8,7 +8,8 @@ namespace Data.ScriptableObjects.Animatios
     [CreateAssetMenu(fileName = "AnimationState", menuName = "ScriptableObjects/Animatios/AnimationState")]
     public class AnimationStateSO : ScriptableObject
     {
-        [SerializeField] private string stateName;
+        [SerializeField, Tooltip("Animator state name.")]
+        private string stateName;
 
         /// <summary>Имя состояния в Animator.</summary>
         public string StateName => stateName;

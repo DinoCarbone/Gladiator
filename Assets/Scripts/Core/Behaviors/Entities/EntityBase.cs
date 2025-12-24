@@ -16,9 +16,14 @@ namespace Core.Behaviors.Entities
     /// </summary>
     public class EntityBase : MonoBehaviour
     {
-        [SerializeField] private PriorityBehaviorsSO priorityBehaviorsSO;
-        [SerializeField] private List<EntityDataPart> entityDatas = new List<EntityDataPart>();
-        [SerializeField] private List<ProviderDataPart> providersSO = new List<ProviderDataPart>();
+        [SerializeField, Tooltip("Reference to the priority behaviors configuration.")]
+        private PriorityBehaviorsSO priorityBehaviorsSO;
+
+        [SerializeField, Tooltip("List of entity data parts for this entity.")]
+        private List<EntityDataPart> entityDatas = new List<EntityDataPart>();
+
+        [SerializeField, Tooltip("List of provider ScriptableObjects to attach to this entity.")]
+        private List<ProviderDataPart> providersSO = new List<ProviderDataPart>();
 
         private List<IState> entityStates;
         private List<Providers.IProvider> providers;

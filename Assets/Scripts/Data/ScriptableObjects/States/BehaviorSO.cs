@@ -7,7 +7,8 @@ namespace Data.ScriptableObjects.States
 {
     public abstract class BehaviorSO<T> : BaseBehaviorSO where T : IIncompatibleStates
     {
-        [SerializeField] private List<BaseBehaviorSO> incompatibleStates;
+        [SerializeField, Tooltip("List of behavior ScriptableObjects that are incompatible with this behavior.")]
+        private List<BaseBehaviorSO> incompatibleStates;
 
         protected List<Type> GetIncompatibleTypes()
         {

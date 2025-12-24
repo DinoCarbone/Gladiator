@@ -9,7 +9,8 @@ namespace Core.Providers
     /// </summary>
     public class PlayerSceneProvider : MonoBehaviour, IPlayerSceneProvider, IPlayerCameraPoint
     {
-        [SerializeField] private Transform pointToLoockCamera;
+        [SerializeField, Tooltip("Transform used as the camera look target.")]
+        private Transform pointToLoockCamera;
 
         /// <summary>Трансформ объекта, на котором находится провайдер (игрок).</summary>
         public Transform Transform => transform;

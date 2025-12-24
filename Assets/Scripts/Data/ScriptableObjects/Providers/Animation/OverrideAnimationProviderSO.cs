@@ -9,8 +9,11 @@ namespace Data.ScriptableObjects.Providers.Animation
     menuName = "ScriptableObjects/Providers/Animations/OverrideAnimationProvider")]
     public class OverrideAnimationProviderSO : AnimationProviderSOBase
     {
-        [SerializeField] private AnimationProviderSOBase animationProviderSO;
-        [SerializeField] private List<AnimationSerializeClipData> clipDatas;
+        [SerializeField, Tooltip("Base animation provider to override.")]
+        private AnimationProviderSOBase animationProviderSO;
+
+        [SerializeField, Tooltip("List of animation clip overrides for specific states.")]
+        private List<AnimationSerializeClipData> clipDatas;
         /// <summary>
         /// Возвращает список состояний анимации с заменёнными клипами из `clipDatas`.
         /// Если для состояния не найден override, используется базовая конфигурация.

@@ -14,8 +14,11 @@ namespace Data.ScriptableObjects.Providers.Agents
       menuName = "ScriptableObjects/Providers/Agets/EnemyAgent")]
     public class EnemyAgentSO : BaseProviderSO
     {
-        [SerializeField] private float attackAngleThreshold = 30f;
-        [SerializeField] private float attackDistance = 1.7f;
+        [SerializeField, Tooltip("Attack angle threshold in degrees.")]
+        private float attackAngleThreshold = 30f;
+
+        [SerializeField, Tooltip("Maximum attack distance.")]
+        private float attackDistance = 1.7f;
 
         /// <summary>Создаёт провайдер агента по списку контекстов (ищет Transform).</summary>
         public override IProvider CreateProvider(List<GameObject> contexts)

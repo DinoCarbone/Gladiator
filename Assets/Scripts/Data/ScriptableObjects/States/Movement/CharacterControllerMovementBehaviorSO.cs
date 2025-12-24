@@ -10,7 +10,8 @@ namespace Data.ScriptableObjects.States.Movement
     menuName = "ScriptableObjects/States/Movement/CharacterControllerMovement")]
     public class CharacterControllerMovementBehaviorSO : BehaviorSO<CharacterControllerMovementState>
     {
-        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField, Tooltip("Movement speed used by the CharacterController.")]
+        private float moveSpeed = 5f;
         
         /// <summary>
         /// Создаёт конфигурируемое состояние движения на основе найденного компонента <see cref="CharacterController"/> в контекстах.
