@@ -3,7 +3,7 @@ using UnityEditor;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace EditorTools
+namespace Editor
 {
     [InitializeOnLoad]
     public class ScriptNamespaceEditor : AssetModificationProcessor

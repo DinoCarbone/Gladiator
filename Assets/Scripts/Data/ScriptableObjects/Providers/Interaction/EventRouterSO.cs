@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Core.Behaviors.Interaction;
 using Core.Providers;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
       menuName = "ScriptableObjects/Providers/Interactions/EventRouter")]
     public class EventRouterSO : BaseProviderSO
     {
-        public override IProvider CreateProvider(List<GameObject> _)
+        public override IProvider CreateProvider(params object[] dependencies)
         {
             /// <summary>Создаёт маршрутизатор событий (EventRouter) для взаимодействий.</summary>
             return new EventRouter();

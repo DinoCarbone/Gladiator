@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.Agents;
 using Core.Providers;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Agents
@@ -21,19 +21,33 @@ namespace Data.ScriptableObjects.Providers.Agents
         private float attackDistance = 1.7f;
 
         /// <summary>Создаёт провайдер агента по списку контекстов (ищет Transform).</summary>
-        public override IProvider CreateProvider(List<GameObject> contexts)
+        public override IProvider CreateProvider(params object[] dependencies)
         {
-             Transform transform = null;
+            Transform transform = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out transform))
-                    break;
+                transform = dependencies[0] as Transform ?? (dependencies[0] as GameObject)?.GetComponent<Transform>();
             }
+
             if (transform == null)
                 throw new Exception($"EnemyAgentSO: Transform is empty");
 
             return new EnemyAgent(transform, attackAngleThreshold, attackDistance);
+        }
+
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Core Transform",
+                    typeName = "UnityEngine.Transform, UnityEngine",
+                    optional = false
+                }
+            };
         }
     }
 }

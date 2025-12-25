@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.Lifecycle;
 using Core.Behaviors.States.Lifecycle;
 using Core.Services.States;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Lifecycle
@@ -14,11 +14,11 @@ namespace Data.ScriptableObjects.States.Lifecycle
         [SerializeField, Tooltip("Points awarded for killing this enemy.")]
         private int costKillable = 1;
         /// <summary>Создаёт конфигурацию смерти врага с указанием стоимости и core GameObject.</summary>
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
            GameObject coreGameObject = null;
 
-            if(contexts.Count > 0) coreGameObject = contexts[0];
+            if(dependencies != null && dependencies.Length > 0) coreGameObject = dependencies[0] as GameObject ?? (dependencies[0] as Component)?.gameObject;
             else
                 throw new Exception("EntityDeathSO: CoreGameObject is empty");
 
@@ -31,6 +31,20 @@ namespace Data.ScriptableObjects.States.Lifecycle
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseDeath);
+        }
+        
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Core GameObject",
+                    typeName = "",
+                    optional = false
+                }
+            };
         }
     }
 }

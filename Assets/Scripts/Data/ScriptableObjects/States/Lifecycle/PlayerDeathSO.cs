@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.Lifecycle;
 using Core.Behaviors.States.Lifecycle;
 using Core.Services.States;
@@ -12,7 +11,7 @@ namespace Data.ScriptableObjects.States.Lifecycle
     public class PlayerDeathSO : BehaviorSO<DefautDeath>
     {
         /// <summary>Создаёт конфигурацию смерти игрока.</summary>
-        public override IState CreateConfigState(List<GameObject> _)
+        public override IState CreateConfigState(params object[] _)
         {
             PlayerKillableData playerKullable = new PlayerKillableData();
 

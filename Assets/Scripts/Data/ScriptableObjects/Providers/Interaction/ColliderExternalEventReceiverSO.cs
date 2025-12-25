@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.Interaction;
 using Core.Providers;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Interaction
@@ -11,14 +11,13 @@ namespace Data.ScriptableObjects.Providers.Interaction
     public class ColliderExternalEventReceiverSO : BaseProviderSO
     {
         /// <summary>Создаёт или возвращает существующий `ColliderExternalEventReceiver` на Collider из контекстов.</summary>
-        public override IProvider CreateProvider(List<GameObject> contexts)
+        public override IProvider CreateProvider(params object[] dependencies)
         {
             Collider controller = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out controller)) 
-                    break;
+                controller = dependencies[0] as Collider ?? (dependencies[0] as GameObject)?.GetComponent<Collider>();
             }
             if(controller == null)
                 throw new Exception("ColliderExternalEventReceiverSO: collider is empty");
@@ -32,6 +31,18 @@ namespace Data.ScriptableObjects.Providers.Interaction
             
             colliderExternalEventReceiver = controller.gameObject.AddComponent<ColliderExternalEventReceiver>();
             return colliderExternalEventReceiver;
+        }
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Collider",
+                    typeName = "UnityEngine.Collider, UnityEngine",
+                    optional = false
+                }
+            };
         }
     }
 }

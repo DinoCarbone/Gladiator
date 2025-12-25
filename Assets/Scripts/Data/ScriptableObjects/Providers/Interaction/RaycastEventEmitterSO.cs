@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.Interaction;
 using Core.Providers;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Interaction
@@ -10,20 +10,33 @@ namespace Data.ScriptableObjects.Providers.Interaction
       menuName = "ScriptableObjects/Providers/Interactions/RaycastEventEmitter")]
     public class RaycastEventEmitterSO : BaseProviderSO
     {
-        public override IProvider CreateProvider(List<GameObject> contexts)
+        public override IProvider CreateProvider(params object[] dependencies)
         {
             /// <summary>Создаёт `RaycastEventEmitter` для указанного источника (Transform) в контекстах.</summary>
             Transform transformObject = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out transformObject)) 
-                break;
+                transformObject = dependencies[0] as Transform ?? (dependencies[0] as GameObject)?.GetComponent<Transform>();
             }
             if(transformObject == null)
             throw new Exception($"RaycastEventEmitterSO: Transform is empty");
 
             return new RaycastEventEmitter(transformObject);
+        }
+        
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Source Transform",
+                    typeName = "UnityEngine.Transform, UnityEngine",
+                    optional = false
+                }
+            };
         }
     }
 }

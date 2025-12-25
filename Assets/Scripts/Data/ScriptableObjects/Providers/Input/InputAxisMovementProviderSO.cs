@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Core.Providers;
 using Core.Providers.Input;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Data.ScriptableObjects.Providers.Input
     menuName = "ScriptableObjects/Providers/Input/InputAxisMovementProvider")]
     public class InputAxisMovementProviderSO : BaseProviderSO
     {
-        public override IProvider CreateProvider(List<GameObject> _)
+        public override IProvider CreateProvider(params object[] _)
         {
             /// <summary>Создаёт провайдер для осевого движения (на основе `IMovementInput`).</summary>
             return new InputAxisMovementProvider();

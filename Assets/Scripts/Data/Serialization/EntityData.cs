@@ -50,4 +50,10 @@ namespace Data.Serialization
             EntityData = new List<object>(entityData);
         }
     }
+    public struct ContextRequirement
+    {
+        public string displayName;
+        public string typeName;
+        public bool optional;
+    }
 }

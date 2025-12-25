@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Core.Providers;
 using Core.Providers.Input;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace Data.ScriptableObjects.Providers.Input
     {
         [SerializeField, Tooltip("Rotation input threshold to consider as movement.")]
         private float rotationThreshold = 0.1f;
-        public override IProvider CreateProvider(List<GameObject> _)
+        public override IProvider CreateProvider(params object[] _)
         {
             /// <summary>Создаёт провайдер вращения оси с указанным порогом.</summary>
             return new InputAxisRotationProvider(rotationThreshold);

@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Movement;
 using Core.Services.States;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Movement
@@ -18,19 +18,31 @@ namespace Data.ScriptableObjects.States.Movement
         /// </summary>
         /// <param name="contexts">Список объектов-контекстов, среди которых ищется необходимый компонент.</param>
         /// <returns>Экземпляр <see cref="IState"/> для данного поведения.</returns>
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
             CharacterController controller = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out controller)) 
-                break;
+                controller = dependencies[0] as CharacterController ?? (dependencies[0] as GameObject)?.GetComponent<CharacterController>();
             }
             if(controller == null)
-            throw new Exception($"CharacterControllerMovementBehaviorSO: Не удалось найти компонент  CharacterController в контекстах для создания состояния {nameof(CharacterControllerMovementState)}.");
+            throw new Exception($"CharacterControllerMovementBehaviorSO: CharacterController is empty");
 
             return new CharacterControllerMovementState(controller ,GetIncompatibleTypes(), moveSpeed);
+        }
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "CharacterController",
+                    typeName = "UnityEngine.CharacterController, UnityEngine",
+                    optional = false
+                }
+            };
         }
 
         /// <summary>Возвращает базовый тип поведения, с которым совместимо это ScriptableObject.</summary>

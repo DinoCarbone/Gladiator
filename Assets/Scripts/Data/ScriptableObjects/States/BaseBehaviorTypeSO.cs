@@ -1,9 +1,8 @@
 using System;
-using UnityEngine;
 
 namespace Data.ScriptableObjects.States
 {
-    public abstract class BaseBehaviorTypeSO : ScriptableObject
+    public abstract class BaseBehaviorTypeSO : ContextRequirementsSO
     {
         /// <summary>
         /// Возвращает базовый тип поведения, с которым соотносится данный ScriptableObject.

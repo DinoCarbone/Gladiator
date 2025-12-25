@@ -13,19 +13,32 @@ namespace Data.ScriptableObjects.Providers.Animation
     public abstract class AnimationProviderSOBase : BaseProviderSO
     {
         /// <summary>Создаёт провайдер анимации на основе первого найденного Animator в контекстах.</summary>
-        public override IProvider CreateProvider(List<GameObject> contexts)
+        public override IProvider CreateProvider(params object[] dependencies)
         {
             Animator animator = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out animator))
-                    break;
+                animator = dependencies[0] as Animator ?? (dependencies[0] as GameObject)?.GetComponent<Animator>();
             }
             if (animator == null)
-                throw new Exception($"AnimationProviderSO: Не удалось найти компонент  Animator в контекстах для создания провайдера {nameof(AnimationTransitionHandler)}.");
+                throw new Exception($"AnimationProviderSO: Animator is empty.");
 
             return new AnimationTransitionNotifier(animator, GetAnimationStateTypeDatas());
+        }
+
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Animator",
+                    typeName = "UnityEngine.Animator, UnityEngine",
+                    optional = false
+                }
+            };
         }
 
         /// <summary>Возвращает список метаданных состояний анимации для создания обработчика переходов.</summary>

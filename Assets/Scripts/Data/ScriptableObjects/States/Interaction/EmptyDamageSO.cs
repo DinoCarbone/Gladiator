@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Interaction;
 using Core.Services.States;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace Data.ScriptableObjects.States.Interaction
         /// </summary>
         /// <param name="_">Контексты, не используются.</param>
         /// <returns>Экземпляр <see cref="IState"/>.</returns>
-        public override IState CreateConfigState(List<GameObject> _)
+        public override IState CreateConfigState(params object[] _)
         {
             return new EmptyDamage(null);
         }

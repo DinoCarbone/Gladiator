@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Attack;
 using Core.Services.States;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace Data.ScriptableObjects.States.Attack
         /// </summary>
         /// <param name="contexts">Список контекстных GameObject, если требуется.</param>
         /// <returns>Экземпляр <see cref="IState"/>, представляющий базовое состояние атаки.</returns>
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
             return new BaseAttack(null);
         }

@@ -7,6 +7,7 @@ using Zenject;
 using Utils;
 using System;
 using Data.ScriptableObjects.States;
+using System.Linq;
 
 namespace Core.Behaviors.Entities
 {
@@ -75,7 +76,13 @@ namespace Core.Behaviors.Entities
 
             foreach (EntityDataPart dataPart in entityDatas)
             {
-                IState state = dataPart.behaviorSO.CreateConfigState(dataPart.contexts);
+                object[] deps = null;
+                if (dataPart.contexts != null && dataPart.contexts.Count > 0)
+                {
+                    deps = dataPart.contexts.Cast<object>().ToArray();
+                }
+
+                IState state = dataPart.behaviorSO.CreateConfigState(deps ?? Array.Empty<object>());
 
                 if (!Extensions.ContainsType(entityStates, state)) entityStates.Add(state);
                 else Debug.LogError("Behavior type already exists");
@@ -95,7 +102,14 @@ namespace Core.Behaviors.Entities
             providers = new List<Providers.IProvider>();
             foreach (ProviderDataPart providerData in providersSO)
             {
-                Providers.IProvider provider = providerData.providerSO.CreateProvider(providerData.contexts);
+                // Собираем зависимости в том порядке, как объявлено в SO
+                object[] deps = null;
+                if (providerData.contexts != null && providerData.contexts.Count > 0)
+                {
+                    deps = providerData.contexts.Cast<object>().ToArray();
+                }
+
+                Providers.IProvider provider = providerData.providerSO.CreateProvider(deps ?? Array.Empty<object>());
 
                 if (!Extensions.ContainsType(providers, provider)) providers.Add(provider);
                 else Debug.LogError("Provider type already exists");

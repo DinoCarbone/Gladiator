@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Movement;
 using Core.Services.States;
+using Data.Serialization;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Movement
@@ -16,17 +16,16 @@ namespace Data.ScriptableObjects.States.Movement
         /// </summary>
         /// <param name="contexts">Список объектов-контекстов для поиска Transform.</param>
         /// <returns>Экземпляр состояния поворота.</returns>
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
             Transform rootTransform = null;
 
-            foreach (GameObject context in contexts)
+            if (dependencies != null && dependencies.Length > 0)
             {
-                if (context.TryGetComponent(out rootTransform)) 
-                break;
+                rootTransform = dependencies[0] as Transform ?? (dependencies[0] as GameObject)?.GetComponent<Transform>();
             }
             if(rootTransform == null)
-            throw new Exception($"TransformRotationBehaviorSO: Не удалось найти компонент  Transform в контекстах для создания состояния {nameof(TransformRotation)}.");
+            throw new Exception($"TransformRotationBehaviorSO: Transform is empty.");
 
             return new TransformRotation(GetIncompatibleTypes(), rootTransform, speed);
         }
@@ -35,6 +34,20 @@ namespace Data.ScriptableObjects.States.Movement
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseRotation);
+        }
+
+        public override ContextRequirement[] GetContextRequirements()
+        {
+            return 
+            new ContextRequirement[]
+            {
+                new ContextRequirement
+                {
+                    displayName = "Transform",
+                    typeName = "UnityEngine.Transform, UnityEngine",
+                    optional = false
+                }
+            };
         }
     }
 }

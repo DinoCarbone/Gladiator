@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Lifecycle;
 using Core.Services.States;
 using UnityEngine;
@@ -13,7 +12,7 @@ namespace Data.ScriptableObjects.States.Lifecycle
     menuName = "ScriptableObjects/States/Base/BaseDeath")]
     public class BaseDeathSO : BaseBehaviorSO
     {
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
             return new BaseDeath(null);
         }

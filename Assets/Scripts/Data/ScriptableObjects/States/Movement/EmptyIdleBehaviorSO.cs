@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Behaviors.States.Movement;
 using Core.Services.States;
 using UnityEngine;
@@ -14,9 +13,9 @@ namespace Data.ScriptableObjects.States.Movement
     /// </summary>
     public class EmptyIdleBehaviorSO : BehaviorSO<EmptyIdleState>
     {
-        /// <param name="contexts">Список GameObject-контекстов, может быть пустым.</param>
+        /// <param name="dependencies">Контекстные зависимости, если требуются.</param>
         /// <returns>Экземпляр <see cref="IState"/> представляющий конфигурацию пустого простоя.</returns>
-        public override IState CreateConfigState(List<GameObject> contexts)
+        public override IState CreateConfigState(params object[] dependencies)
         {
             return new EmptyIdleState(GetIncompatibleTypes());
         }

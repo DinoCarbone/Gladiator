@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Core.Behaviors.Interaction;
 using Core.Providers;
 using Data.ScriptableObjects.Animatios;
@@ -23,7 +22,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
         private AnimationEventSO animationEvent;
 
         /// <summary>Создаёт провайдер `DamageDealer` с заданными параметрами.</summary>
-        public override IProvider CreateProvider(List<GameObject> _)
+        public override IProvider CreateProvider(params object[] _)
         {
             return new DamageDealer(animationEvent, damage, distance, radius);
         }
