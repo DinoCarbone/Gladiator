@@ -2,6 +2,7 @@ using System;
 using Core.Behaviors.Interaction;
 using Core.Providers;
 using Data.Serialization;
+using UnityEngine;
 
 namespace Core.Behaviors.Health
 {
@@ -26,6 +27,8 @@ namespace Core.Behaviors.Health
         /// <param name="maxHealth">Максимальное здоровье.</param>
         public HealthService(int maxHealth)
         {
+            if(maxHealth <= 0) Debug.LogError("Health Service Max Health Reached");
+            
             MaxHealth = maxHealth;
             Health = maxHealth;
         }
@@ -39,7 +42,7 @@ namespace Core.Behaviors.Health
         }
         private void ReceiveDamage(int damage)
         {
-            if(damage <= 0) return;
+            if(damage <= 0 || Health <= 0) return;
 
             Health -= damage;
             if(Health <= 0)
