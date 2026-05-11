@@ -17,7 +17,7 @@ namespace Core.Behaviors.Interaction
 
         /// <summary>Инициализация: собирает доступные обработчики событий из <see cref="AllEntityData"/>.</summary>
         [Inject]
-        private void Construct(AllEntityData allEntityData)
+        public void Construct(AllEntityData allEntityData)
         {
             AllEntityData entityData = Extensions.AssignWithNullCheck(allEntityData);
 
