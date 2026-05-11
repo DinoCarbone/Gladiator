@@ -1,7 +1,7 @@
 using System;
 using Core.Services;
 using Core.Services.States;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 using Utils;
 

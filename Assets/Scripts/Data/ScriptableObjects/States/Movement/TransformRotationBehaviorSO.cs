@@ -1,7 +1,7 @@
 using System;
 using Core.Behaviors.States.Movement;
 using Core.Services.States;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Movement

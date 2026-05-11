@@ -1,7 +1,7 @@
 using System;
 using Core.Behaviors.Agents;
 using Core.Providers;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Agents

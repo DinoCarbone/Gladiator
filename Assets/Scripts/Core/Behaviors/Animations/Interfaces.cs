@@ -1,6 +1,6 @@
 using System;
 using Data.ScriptableObjects.Animatios;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Core.Behaviors.Animations

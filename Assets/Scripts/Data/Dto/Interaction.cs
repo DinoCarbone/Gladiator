@@ -1,8 +1,8 @@
 using Core.Behaviors.Interaction;
 
-namespace Data.Serialization
+namespace Data.Dto
 {
-    public class DamageData : IEvent
+    public struct DamageData : IEvent
     {
         /// <summary>Количество урона, передаваемое в событии взаимодействия.</summary>
         public readonly int Damage;

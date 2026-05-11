@@ -1,6 +1,6 @@
 using Core.Behaviors.Health;
 using Core.Behaviors.Interaction;
-using Data.Serialization;
+using Data.Dto;
 using NSubstitute;
 using NUnit.Framework;
 

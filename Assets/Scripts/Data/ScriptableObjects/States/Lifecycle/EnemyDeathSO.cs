@@ -2,7 +2,7 @@ using System;
 using Core.Behaviors.Lifecycle;
 using Core.Behaviors.States.Lifecycle;
 using Core.Services.States;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Lifecycle

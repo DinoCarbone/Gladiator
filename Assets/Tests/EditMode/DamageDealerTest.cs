@@ -1,6 +1,6 @@
 using Core.Behaviors.Interaction;
 using Data.ScriptableObjects.Animatios;
-using Data.Serialization;
+using Data.Dto;
 using NSubstitute;
 using NUnit.Framework;
 
