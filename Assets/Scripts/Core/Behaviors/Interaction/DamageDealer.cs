@@ -28,7 +28,7 @@ namespace Core.Behaviors.Interaction
         }
 
         [Inject]
-        private void Construct(IExternalEventEmitter externalEventEmitter)
+        public void Construct(IExternalEventEmitter externalEventEmitter)
         {
             this.externalEventEmitter = Extensions.AssignWithNullCheck(externalEventEmitter);
         }

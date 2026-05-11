@@ -22,12 +22,15 @@ namespace Tests.EditMode
         [Test]
         public void ReceiveEvent_CalledTwice_ForwardsBothToInternalService()
         {
+            // Arrange
             var event1 = Substitute.For<IEvent>();
             var event2 = Substitute.For<IEvent>();
 
+            // Act
             receiver.ReceiveEvent(event1);
             receiver.ReceiveEvent(event2);
 
+            // Assert
             internalEventReceiverService.Received(1).ReceiveEvent(event1);
             internalEventReceiverService.Received(1).ReceiveEvent(event2);
         }
