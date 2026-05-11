@@ -1,7 +1,7 @@
 using Data.ScriptableObjects.Animatios;
 using Zenject;
 using Utils;
-using Data.Serialization;
+using Data.Dto;
 
 namespace Core.Behaviors.Interaction
 {

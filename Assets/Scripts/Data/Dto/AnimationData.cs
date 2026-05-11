@@ -5,7 +5,7 @@ using Data.ScriptableObjects.Animatios;
 using Data.ScriptableObjects.States;
 using UnityEngine;
 
-namespace Data.Serialization
+namespace Data.Dto
 {
     public abstract class AnimationSerializeDataBase
     {

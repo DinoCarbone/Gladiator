@@ -1,7 +1,7 @@
 using System;
 using Core.Behaviors.UI;
 using Core.Providers;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 using UnityEngine.UI;
 

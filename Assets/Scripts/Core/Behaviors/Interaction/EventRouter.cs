@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.ScriptableObjects.Animatios;
-using Data.Serialization;
+using Data.Dto;
 using Utils;
 using Zenject;
 

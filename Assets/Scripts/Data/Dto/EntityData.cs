@@ -5,7 +5,7 @@ using Data.ScriptableObjects.Providers;
 using Data.ScriptableObjects.States;
 using UnityEngine;
 
-namespace Data.Serialization
+namespace Data.Dto
 {
     [Serializable]
     public class EntityDataPart

@@ -1,7 +1,7 @@
 using System;
 using Core.Behaviors.Interaction;
 using Core.Providers;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Interaction

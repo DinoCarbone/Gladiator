@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core.Behaviors.Animations;
 using Core.Providers;
-using Data.Serialization;
+using Data.Dto;
 using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Animation
