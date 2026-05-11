@@ -11,7 +11,7 @@ namespace Core.Behaviors.Agents
     public abstract class MovementAttackAgent : IAttackProvider, IAxisMovementProvider, IAxisRotationProvider
     {
         private readonly Transform selfTransform;
-        protected abstract Transform targetTransform { get; }
+        public abstract Transform TargetTransform { get;}
         private readonly float attackAngleThreshold;
         private readonly float attackDistance;
 
@@ -52,13 +52,13 @@ namespace Core.Behaviors.Agents
 
         private bool CalculateIsAttack()
         {
-            var distance = Vector3.Distance(GetAgentPosition(), targetTransform.position);
+            var distance = Vector3.Distance(GetAgentPosition(), TargetTransform.position);
             return distance <= attackDistance && IsLookingAtPlayer();
         }
 
         private bool CalculateIsHandle()
         {
-            var distance = Vector3.Distance(GetAgentPosition(), targetTransform.position);
+            var distance = Vector3.Distance(GetAgentPosition(), TargetTransform.position);
             return distance > attackDistance;
         }
 
@@ -70,7 +70,7 @@ namespace Core.Behaviors.Agents
 
         private Quaternion CalculateRotation()
         {
-            var direction = (targetTransform.position - GetAgentPosition()).normalized;
+            var direction = (TargetTransform.position - GetAgentPosition()).normalized;
             if (direction == Vector3.zero) return GetAgentRotation();
 
             var targetRotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -87,7 +87,7 @@ namespace Core.Behaviors.Agents
 
         private bool IsLookingAtPlayer()
         {
-            var directionToPlayer = (targetTransform.position - GetAgentPosition()).normalized;
+            var directionToPlayer = (TargetTransform.position - GetAgentPosition()).normalized;
             var forward = selfTransform?.forward ?? Vector3.forward;
 
             var angle = Vector3.Angle(forward, directionToPlayer);
