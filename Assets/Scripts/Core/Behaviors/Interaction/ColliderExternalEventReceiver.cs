@@ -10,7 +10,7 @@ namespace Core.Behaviors.Interaction
         private IInternalEventReceiverService internalEventReceiverService;
 
         [Inject]
-        private void Construct(IInternalEventReceiverService internalEventReceiverService)
+        public void Construct(IInternalEventReceiverService internalEventReceiverService)
         {
             this.internalEventReceiverService = Extensions.AssignWithNullCheck(internalEventReceiverService);
         }
