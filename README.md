@@ -1,90 +1,44 @@
 # Gladiator
 
-Gladiator это демонстрационная архитектура для игры на Unity с акцентом на чистую модульную логику поведения сущностей, мощную машину состояний, гибкую систему анимаций и продуманную систему внедрения зависимостей. Репозиторий ориентирован на расширяемость и быструю замену отдельных элементов поведения без изменения остального кода.
+> A modular Unity gameplay architecture sample built around composable entity behavior, dependency injection, and a priority-driven state machine.
 
-**Ключевые идеи**
+Gladiator demonstrates how to keep gameplay logic independent from `MonoBehaviour` and assemble characters from reusable states and providers configured with `ScriptableObject` assets. Behaviors can be replaced or extended without changing the state-machine core.
 
-1. Машина состояний и поведенческая логика реализованы через абстрактные интерфейсы и легко заменяемые конфигурации
-2. Чёткое разделение обязанностей между провайдерами данных и поведениями
-3. Надёжная интеграция DI через Zenject с собственным гибридным сервисом инъекций
-4. Гибкая кастомная система анимаций с поддержкой override и crossfade
+## Highlights
 
-**Где смотреть код**
+- **Composable state machine** — enter, update, and exit contracts with priorities, conflict resolution, and deferred state changes.
+- **Data-driven entities** — states and providers are assembled through `ScriptableObject` configurations and explicit context requirements.
+- **Dependency injection** — Zenject bindings are combined with a local hybrid resolver for dependencies between entity components.
+- **Flexible animation layer** — runtime clip overrides, crossfades, animation events, and completion notifications.
 
-1. Машина состояний и базовые интерфейсы находятся в `Assets/Scripts/Core/Services/States` и `Assets/Scripts/Core/Behaviors/States`
-2. Сборщики сущностей и интеграция состояний через ScriptableObject находятся в `Assets/Scripts/Core/Behaviors/Entities/EntityBase.cs`
-3. Провайдеры сцены и ввода находятся в `Assets/Scripts/Core/Providers`
-4. DI инсталлеры и гибридный сервис инъекций находятся в `Assets/Scripts/Core/Services/DI`
-5. Система анимаций и вспомогательные компоненты находятся в `Assets/Scripts/Core/Behaviors/Animations`
+## Project Structure
 
-**Машина состояний и поведение**
+| Area | Location |
+| --- | --- |
+| State machine | `Assets/Scripts/Core/Services/States` |
+| Entity composition | `Assets/Scripts/Core/Behaviors/Entities` |
+| Gameplay states and providers | `Assets/Scripts/Core/Behaviors/States`, `Assets/Scripts/Core/Providers` |
+| Animation system | `Assets/Scripts/Core/Behaviors/Animations` |
+| Dependency injection | `Assets/Scripts/Core/Services/DI` |
+| Edit Mode and Play Mode tests | `Assets/Tests` |
 
-Архитектура машины состояний построена вокруг набора простых интерфейсов `IState`, `IEnterable`, `IExitable`, `IUpdateState`, `IIncompatibleStates` и связанного базового кода `StateMachineBase` плюс конкретная реализация `StateMachine`. Такое разделение даёт следующие преимущества.
+## Getting Started
 
-1. Логика состояний инкапсулирована в отдельных классах. Новое поведение добавляется как отдельный класс состояния и регистрируется через конфигурацию сущности. Пример реализации и сборки состояний можно посмотреть в `Assets/Scripts/Core/Behaviors/States` и в `Assets/Scripts/Core/Behaviors/Entities/EntityBase.cs`
-2. Совместимость и несовместимость состояний задаётся через интерфейс `IIncompatibleStates`. Машина использует кэш типов чтобы быстро проверять конфликтные пары и применять правила приоритетов
-3. Приоритеты состояний настраиваются и применяются при выборе кандидатов на вход. Отложенное применение изменений и проверка CanEnter и CanExit делают поведение предсказуемым и безопасным для реального времени
-4. Такая модель легко заменяется или расширяется. Для замены механики достаточно предоставить новую реализацию интерфейсов или изменить фабрики ScriptableObject без правки ядра машины состояний
+1. Install **Unity 6000.3.16f1**.
+2. Clone this repository and open the project in Unity.
+3. Open `Assets/Scenes/Main.unity`.
+4. Enter Play Mode.
 
-Приоритеты состояний
+Unity Package Manager restores the required packages from `Packages/manifest.json`.
 
-Машина поддерживает приоритеты по типам состояний: чем выше приоритет, тем сильнее состояние при разрешении конфликтов. По умолчанию состояние смерти имеет самый высокий приоритет, поэтому во время смерти персонажа никакие другие состояния не активируются. При желании поведение можно сделать гибким: например, добавить состояние воскрешения и задать ему более высокий приоритет через ScriptableObject, переместив его выше в конфигурации. После этого воскрешение будет преобладать над смертью и правильно вытеснять её в нужный момент.
+## Controls
 
-Важно: все состояния и провайдеры создаются через конфигурации ScriptableObject (SO) и пробрасываются в инспекторе при создании сущности. SO теперь могут объявлять `contextRequirements` — список конкретных контекстных зависимостей (ключ, подпись, требуемый тип, опциональность). Если `contextRequirements` пусты, в инспекторе не показываются поля контекстов. Это устраняет прямую зависимость от MonoBehaviour и позволяет собирать сущность из чистых объектов состояний и провайдеров. Благодаря этому замена поведения становится быстрой и предсказуемой. Например, сущность врага может получать провайдер `EnemyAgent`, реализующий `IAttackProvider`, `IAxisMovementProvider` и `IAxisRotationProvider`. Если в дальнейшем нужно управлять этой сущностью с устройства ввода, достаточно заменить провайдер на тот, который читает ввод с контроллера или клавиатуры, без изменений основной логики состояний.
+| Action | Input |
+| --- | --- |
+| Move | `WASD` or arrow keys |
+| Look | Mouse |
+| Attack | Left mouse button or `Left Ctrl` |
 
-**Кастомный редактор для зависимостей состояний и провайдеров сущности**
+## Technology
 
-![alt text](image.png)
-
-В списке выбираются состояния для сущности. Там же автоматически появляются поля, которые нужны для её работы. Если внутненние зависимости не требуются, то будет надпись 'No contexts required"'.
-
-**Dependency injection и провайдеры**
-
-Проект использует Zenject для биндинга и инъекций через инсталлеры `Assets/Scripts/Core/Services/DI/CommonServicesInstaller.cs` и `Assets/Scripts/Core/Services/DI/SceneServicesInstaller.cs`. Дополнительно реализован `IHybridInjectService` который комбинирует контейнер Zenject и локальный пул объектов для разрешения взаимных зависимостей внутри набора состояний и провайдеров. Это даёт лёгкость тестирования и простоту создания сущностей из ScriptableObject конфигураций.
-
-1. Провайдеры вынесены в собственный слой `Assets/Scripts/Core/Providers`. Интерфейсы вроде `IPlayerSceneProvider` или `ICameraProvider` позволяют поведению и сервисам работать с абстракциями, а не с конкретными компонентами Unity
-2. Инсталлеры создают фабрики и синглтоны, регистрируют отображение интерфейсов на реализации и подготавливают сцену к прогону
-
-**Анимации и система переключения**
-
-Анимационная подсистема реализована как набор небольших, но мощных компонентов. Ключевые особенности следующего набора файлов: `Assets/Scripts/Core/Behaviors/Animations/AnimationPlayService.cs`, `Assets/Scripts/Core/Behaviors/Animations/AnimationTransitionHandler.cs`, `Assets/Scripts/Core/Behaviors/Animations/AnimationEventsObserverBehavior.cs`.
-
-1. Сервис воспроизведения `AnimationPlayService` умеет подставлять `AnimationClip` в `AnimatorOverrideController` и выполнять плавные переходы через `CrossFade` с корректировкой времени перехода
-2. Сопоставление состояний и анимаций осуществляется через данные состояний и специальные структуры enter data. Это позволяет иметь базовые наборы анимаций и наборы override для организации семейств сущностей
-3. Нотификаторы событий анимации и обработчики конца анимации облегчают синхронизацию логики и визуала. Система событий позволяет перехватывать callbacks анимаций и ретранслировать их в поведение сущностей
-
-**Unit тесты**
-
-Часть логики в проекте покрыто тестированием - не стал покрывать весь проект. Данные тесты для наглядности, что логика модульная, не наследуется от monobihavior, поэтому легко и быстро тестируется.
-Присутствуют тесты как в Edit mode, так и в Play mode (для тестирования физики и передачу событий между сущностями).
-Для тестирования использовал NUnit (база) NSubstitute (для моков и стабов).
-
-**Сильные стороны архитектуры**
-
-1. Чёткое разделение ответственностей между поведением, провайдерами и системой анимаций делает код простым для сопровождения
-2. Инъекции зависимостей реализованы через Zenject и расширены гибридным механизмом что упрощает создание взаимозависимых объектов и удобство при тестировании
-3. StateMachine написана с упором на производительность и предсказуемость: кэширование совместимых типов, отложенная обработка добавлений и удалений, обработка приоритетов
-4. Система анимаций поддерживает переопределение клипов на лету и плавное смешение состояний что упрощает создание вариативных семейств врагов и персонажей
-
-**Как добавить новое поведение**
-
-1. Создайте класс состояния, реализующий нужные интерфейсы `IEnterState`, `IExitState`, `IUpdateState` или `IIncompatibleStates`
-2. Добавьте описание в ScriptableObject конфигурацию поведения и подключите его в `EntityDataPart` в инспекторе
-3. При необходимости реализуйте провайдер через `Assets/Scripts/Core/Providers` и зарегистрируйте бин в соответствующем инсталлере
-
-**Быстрый старт**
-
-1. Откройте сцену проекта в Unity
-2. Убедитесь что в сцене присутствуют инсталлеры `CommonServicesInstaller` и `SceneServicesInstaller`
-3. Запустите сцену
-
-**Где смотреть подробности**
-
-1. `Assets/Scripts/Core/Services/States/StateMachine.cs` это сердце логики выбора и совместимости состояний
-2. `Assets/Scripts/Core/Behaviors/Entities/EntityBase.cs` показывает процесс создания состояний из ScriptableObject и инъекции зависимостей
-3. `Assets/Scripts/Core/Behaviors/Animations/AnimationPlayService.cs` отвечает за проигрывание и override клипов
-4. `Assets/Scripts/Core/Services/DI/IHybridInjectService.cs` показывает реализацию гибридной инъекции
-
-Лицензия
-
-Dino Carbone
+Unity · C# · URP · Zenject · Cinemachine · NUnit · NSubstitute
