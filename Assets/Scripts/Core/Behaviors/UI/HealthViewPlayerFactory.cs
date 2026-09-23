@@ -11,9 +11,6 @@ namespace Core.Behaviors.UI
             healthViewUpdater = new HealthViewUpdater(valueDisplay);
         }
 
-        /// <summary>
-        /// Создаёт и возвращает инстанс `IHealthViewUpdater` для конкретного сервиса здоровья.
-        /// </summary>
         public IHealthViewUpdater Create(IHealthService healthService)
         {
             healthViewUpdater.Construct(healthService);

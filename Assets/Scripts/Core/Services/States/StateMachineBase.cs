@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace Core.Services.States
 {
-    /// <summary>
-    /// Базовый класс для машин состояний. Обеспечивает хранение и кэширование метаданных состояний,
-    /// регистрацию стандартных обработчиков входа/выхода/обновления и логику приоритетов.
-    /// </summary>
     public abstract class StateMachineBase
     {
         protected List<StateWithType> currentStates = new List<StateWithType>();
@@ -89,7 +85,7 @@ namespace Core.Services.States
 
                 var data = new StateCachedData();
                 var allTypes = new List<Type>();
-                
+
                 var currentType = type;
                 while (currentType != null && currentType != typeof(object))
                 {
@@ -181,10 +177,10 @@ namespace Core.Services.States
             public StateWithType(IState state)
             {
                 State = state;
-                Type = state.GetType(); 
+                Type = state.GetType();
             }
         }
-        
+
         protected class StateCachedData
         {
             public HashSet<Type> AllAssignableTypes;

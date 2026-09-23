@@ -5,10 +5,7 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Movement
 {
-    /// <summary>
-    /// Используется только для прокидывания в списки несовместимых состояний.
-    /// </summary>
-    [CreateAssetMenu(fileName = "_BaseMovement", 
+    [CreateAssetMenu(fileName = "_BaseMovement",
     menuName = "ScriptableObjects/States/Base/BaseMovement")]
     public class BaseMovementBehaviorSO : BaseBehaviorSO
     {
@@ -17,7 +14,6 @@ namespace Data.ScriptableObjects.States.Movement
             return new BaseMovement(null);
         }
 
-        /// <summary>Возвращает базовый тип для состояний движения.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseMovement);

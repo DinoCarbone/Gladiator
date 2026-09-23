@@ -15,9 +15,6 @@ namespace Core.Behaviors.Agents
         {
         }
 
-            /// <summary>
-            /// Выполняет внедрение провайдера сцены игрока и устанавливает цель агента.
-            /// </summary>
             [Inject]
             public void Construct(IPlayerSceneProvider playerSceneProvider)
             {

@@ -6,10 +6,6 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Agents
 {
-    /// <summary>
-    /// ScriptableObject-конфиг для создания `EnemyAgent` провайдера.
-    /// Хранит параметры атаки (угол, дистанция) и создаёт провайдер по контекстам.
-    /// </summary>
     [CreateAssetMenu(fileName = "EnemyAgent",
       menuName = "ScriptableObjects/Providers/Agets/EnemyAgent")]
     public class EnemyAgentSO : BaseProviderSO
@@ -20,7 +16,6 @@ namespace Data.ScriptableObjects.Providers.Agents
         [SerializeField, Tooltip("Maximum attack distance.")]
         private float attackDistance = 1.7f;
 
-        /// <summary>Создаёт провайдер агента по списку контекстов (ищет Transform).</summary>
         public override IProvider CreateProvider(params object[] dependencies)
         {
             Transform transform = null;
@@ -38,7 +33,7 @@ namespace Data.ScriptableObjects.Providers.Agents
 
         public override ContextRequirement[] GetContextRequirements()
         {
-            return 
+            return
             new ContextRequirement[]
             {
                 new ContextRequirement

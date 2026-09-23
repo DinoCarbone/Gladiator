@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.Providers.Input
 {
-    [CreateAssetMenu(fileName = "InputAxisRotationProvider", 
+    [CreateAssetMenu(fileName = "InputAxisRotationProvider",
     menuName = "ScriptableObjects/Providers/Input/InputAxisRotationProvider")]
     public class InputAxisRotationProviderSO : BaseProviderSO
     {
@@ -12,7 +12,6 @@ namespace Data.ScriptableObjects.Providers.Input
         private float rotationThreshold = 0.1f;
         public override IProvider CreateProvider(params object[] _)
         {
-            /// <summary>Создаёт провайдер вращения оси с указанным порогом.</summary>
             return new InputAxisRotationProvider(rotationThreshold);
         }
     }

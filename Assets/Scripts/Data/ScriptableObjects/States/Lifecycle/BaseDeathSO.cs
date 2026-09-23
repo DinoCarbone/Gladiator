@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Lifecycle
 {
-    /// <summary>
-    /// Используется только для прокидывания в списки несовместимых состояний.
-    /// </summary>
     [CreateAssetMenu(fileName = "_BaseDeath",
     menuName = "ScriptableObjects/States/Base/BaseDeath")]
     public class BaseDeathSO : BaseBehaviorSO

@@ -12,7 +12,6 @@ namespace Data.ScriptableObjects.Providers.Interaction
     {
         public override IProvider CreateProvider(params object[] dependencies)
         {
-            /// <summary>Создаёт `RaycastEventEmitter` для указанного источника (Transform) в контекстах.</summary>
             Transform transformObject = null;
 
             if (dependencies != null && dependencies.Length > 0)
@@ -24,10 +23,10 @@ namespace Data.ScriptableObjects.Providers.Interaction
 
             return new RaycastEventEmitter(transformObject);
         }
-        
+
         public override ContextRequirement[] GetContextRequirements()
         {
-            return 
+            return
             new ContextRequirement[]
             {
                 new ContextRequirement

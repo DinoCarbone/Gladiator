@@ -5,9 +5,6 @@ using Data.Dto;
 
 namespace Core.Behaviors.Interaction
 {
-    /// <summary>
-    /// Обработчик события анимации, который при совпадении события производит эмиссию события нанесения урона.
-    /// </summary>
     public class DamageDealer : IAnimationEventReceiver, Providers.IProvider
     {
         private readonly float radius = 1;
@@ -16,9 +13,6 @@ namespace Core.Behaviors.Interaction
         IExternalEventEmitter externalEventEmitter;
         private readonly AnimationEventSO animationEvent;
 
-        /// <summary>
-        /// Создаёт инстанс с параметрами урона и связанного анимационного события.
-        /// </summary>
         public DamageDealer(AnimationEventSO animationEvent, int damage, float distance, float radius)
         {
             this.animationEvent = animationEvent;
@@ -33,9 +27,6 @@ namespace Core.Behaviors.Interaction
             this.externalEventEmitter = Extensions.AssignWithNullCheck(externalEventEmitter);
         }
 
-        /// <summary>
-        /// Вызывается при наступлении анимационного события; при совпадении — эмитит внутреннее DamageData.
-        /// </summary>
         public void ReceiveAnimationEvent(AnimationEventSO animationEvent)
         {
             if (this.animationEvent == animationEvent)

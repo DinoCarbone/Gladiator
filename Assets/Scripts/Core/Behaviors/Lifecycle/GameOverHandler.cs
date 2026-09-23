@@ -4,9 +4,6 @@ using Utils;
 
 namespace Core.Behaviors.Lifecycle
 {
-    /// <summary>
-    /// Обрабатывает событие гибели игрока и перезагружает сцену (Game Over).
-    /// </summary>
     public class GameOverHandler
     {
         private readonly IPlayerDeathNotifier playerDeathNotifier;
@@ -33,7 +30,6 @@ namespace Core.Behaviors.Lifecycle
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        /// <summary>Отписывается от событий и освобождает ресурсы.</summary>
         public void Dispose()
         {
             Unsubscribe();

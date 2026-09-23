@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.States
 {
-    /// <summary>
-    /// Приоретет состояний. Чем выше - тем больше.
-    /// </summary>
     [CreateAssetMenu(fileName = "PriorityStates", menuName = "ScriptableObjects/PriorityStates")]
     public class PriorityBehaviorsSO : ScriptableObject
     {

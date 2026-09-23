@@ -5,10 +5,7 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Movement
 {
-    /// <summary>
-    /// Используется только для прокидывания в списки несовместимых состояний.
-    /// </summary>
-    [CreateAssetMenu(fileName = "_BaseIdle", 
+    [CreateAssetMenu(fileName = "_BaseIdle",
     menuName = "ScriptableObjects/States/Base/BaseIdle")]
     public class BaseIdleBehaviorSO : BaseBehaviorSO
     {
@@ -17,7 +14,6 @@ namespace Data.ScriptableObjects.States.Movement
             return new BaseIdle(null);
         }
 
-        /// <summary>Возвращает базовый тип для idle-состояний.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseIdle);

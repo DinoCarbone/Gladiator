@@ -13,7 +13,6 @@ namespace Data.ScriptableObjects.States.Attack
         {
             return new DefautAttack(GetIncompatibleTypes());
         }
-        /// <summary>Создаёт конфигурацию состояния атаки и возвращает базовый тип поведения.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseAttack);

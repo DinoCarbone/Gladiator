@@ -13,13 +13,8 @@ namespace Core.Providers.Input
         private readonly float rotationThreshold = 0.1f;
         private Quaternion rotation = Quaternion.identity;
 
-        /// <summary>Текущее вращение, рассчитанное по оси движения и направлению камеры.</summary>
         public Quaternion Rotation => GetAxisRotation();
 
-        /// <summary>
-        /// Создаёт провайдер вращения оси с порогом чувствительности.
-        /// </summary>
-        /// <param name="rotationThreshold">Минимальная величина оси для обновления поворота.</param>
         public InputAxisRotationProvider(float rotationThreshold)
         {
             this.rotationThreshold = rotationThreshold;
@@ -32,10 +27,6 @@ namespace Core.Providers.Input
             cameraTransform = Extensions.AssignWithNullCheck(cameraProvider.CameraTransform);
         }
 
-        /// <summary>
-        /// Вычисляет направление взгляда по текущей оси движения и ориентации камеры.
-        /// </summary>
-        /// <returns>Quaternion с направлением взгляда; сохраняется между вызовами.</returns>
         private Quaternion GetAxisRotation()
         {
             if (movementInput.Axis.magnitude > rotationThreshold)
@@ -57,7 +48,6 @@ namespace Core.Providers.Input
             return rotation;
         }
 
-        /// <summary>Освобождает ссылки на сервис ввода.</summary>
         public void Dispose()
         {
             movementInput = null;

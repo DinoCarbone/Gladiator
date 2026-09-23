@@ -12,7 +12,6 @@ namespace Data.ScriptableObjects.Providers.Health
         private int maxHealth = 100;
         public override IProvider CreateProvider(params object[] _)
         {
-            /// <summary>Создаёт сервис здоровья с заданным максимумом.</summary>
             return new HealthService(maxHealth);
         }
     }

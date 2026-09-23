@@ -10,7 +10,6 @@ namespace Data.ScriptableObjects.Providers.Interaction
       menuName = "ScriptableObjects/Providers/Interactions/ColliderExternalEventReceiver")]
     public class ColliderExternalEventReceiverSO : BaseProviderSO
     {
-        /// <summary>Создаёт или возвращает существующий `ColliderExternalEventReceiver` на Collider из контекстов.</summary>
         public override IProvider CreateProvider(params object[] dependencies)
         {
             Collider controller = null;
@@ -28,7 +27,7 @@ namespace Data.ScriptableObjects.Providers.Interaction
             {
                 return colliderExternalEventReceiver;
             }
-            
+
             colliderExternalEventReceiver = controller.gameObject.AddComponent<ColliderExternalEventReceiver>();
             return colliderExternalEventReceiver;
         }

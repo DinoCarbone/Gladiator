@@ -11,7 +11,6 @@ namespace Data.ScriptableObjects.Providers.UI
       menuName = "ScriptableObjects/Providers/UI/HealthEntity")]
     public class HealthEntityUiSO : BaseProviderSO
     {
-        /// <summary>Создаёт визуализацию здоровья (`HealthViewUpdater`) на основе найденного `Image`.</summary>
         public override IProvider CreateProvider(params object[] dependencies)
         {
             Image barImage = null;
@@ -29,7 +28,7 @@ namespace Data.ScriptableObjects.Providers.UI
 
         public override ContextRequirement[] GetContextRequirements()
         {
-            return 
+            return
             new ContextRequirement[]
             {
                 new ContextRequirement

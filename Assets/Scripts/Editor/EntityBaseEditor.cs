@@ -6,10 +6,6 @@ using Data.ScriptableObjects.States;
 
 namespace Editor
 {
-    /// <summary>
-    /// Определяет нужные поля для состояний и провайдеров сущности,
-    /// вместо абстрактрых списов game objects
-    /// </summary>
     [CustomEditor(typeof(Core.Behaviors.Entities.EntityBase))]
     public class EntityBaseEditor : UnityEditor.Editor
     {
@@ -113,7 +109,6 @@ namespace Editor
                     EditorGUILayout.EndVertical();
                 }
 
-                // add button at bottom of entityDatas
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("+", GUILayout.Width(24)))
@@ -123,7 +118,6 @@ namespace Editor
                 EditorGUILayout.EndHorizontal();
             }
 
-            // spacing between lists
             GUILayout.Space(8);
         }
 
@@ -200,7 +194,6 @@ namespace Editor
                     EditorGUILayout.EndVertical();
                 }
 
-                // add button at bottom of providersSO
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("+", GUILayout.Width(24)))

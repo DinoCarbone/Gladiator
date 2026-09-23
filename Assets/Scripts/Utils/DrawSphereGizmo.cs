@@ -9,9 +9,6 @@ namespace Utils
 
         [SerializeField, Tooltip("Color of the debug sphere gizmo.")]
         private Color color = Color.red;
-        /// <summary>
-        /// Рисует в сцене отладочную окружность заданного радиуса и цвета.
-        /// </summary>
         void OnDrawGizmos()
         {
             Gizmos.color = color;

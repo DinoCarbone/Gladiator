@@ -10,7 +10,6 @@ namespace Data.ScriptableObjects.States.Lifecycle
     menuName = "ScriptableObjects/States/Lifecycle/PlayerDeath")]
     public class PlayerDeathSO : BehaviorSO<DefautDeath>
     {
-        /// <summary>Создаёт конфигурацию смерти игрока.</summary>
         public override IState CreateConfigState(params object[] _)
         {
             PlayerKillableData playerKullable = new PlayerKillableData();
@@ -18,7 +17,6 @@ namespace Data.ScriptableObjects.States.Lifecycle
             return new DefautDeath(GetIncompatibleTypes(), playerKullable);
         }
 
-        /// <summary>Возвращает базовый тип поведения для состояний смерти.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseDeath);

@@ -9,52 +9,40 @@ namespace Data.Dto
 {
     public abstract class AnimationSerializeDataBase
     {
-        /// <summary>Базовое время перекрытия/плавного смешения для состояния анимации.</summary>
         public float baseBlendTime;
 
-        /// <summary>Ссылка на ScriptableObject состояния анимации.</summary>
         public AnimationStateSO animationStateSO;
 
-        /// <summary>Переопределённые времена смешения для конкретных клипов/состояний.</summary>
         public List<OverrideBlendTimeData> overrideBlendTimeDatas;
     }
     [Serializable]
     public class AnimationSerializeClipData : AnimationSerializeDataBase
     {
-        /// <summary>Клип анимации, используемый для данного элемента сериализации.</summary>
         public AnimationClip clip;
     }
     [Serializable]
     public class AnimationSerializeTypeData : AnimationSerializeDataBase
     {
-        /// <summary>ScriptableObject, указывающий на тип поведения, с которым связан набор анимаций.</summary>
         public BaseBehaviorTypeSO behaviorTypeSO;
     }
     [Serializable]
     public class OverrideBlendTimeData
     {
-         /// <summary>Состояние анимации, для которого переопределяется время смешения.</summary>
          public AnimationStateSO animationStateSO;
 
-         /// <summary>Переопределённое время смешения для указанного состояния.</summary>
          public float overrideBlendTime;
     }
-    
+
     public abstract class AnimationStateBase
     {
-        /// <summary>Время смешения для этого состояния анимации.</summary>
         public readonly float BlendTime;
 
-        /// <summary>Имя состояния анимации.</summary>
         public readonly string StateName;
 
-        /// <summary>Анимационный клип, соответствующий этому состоянию.</summary>
         public readonly AnimationClip Clip;
 
-        /// <summary>Словарь переопределённых времен смешения по имени клипа/состояния.</summary>
         public readonly Dictionary<string, float> OverrideBlendTimes;
 
-        /// <summary>Создаёт базовое представление состояния анимации.</summary>
         public AnimationStateBase(string stateName, AnimationClip clip, float blendTime, Dictionary<string, float> overrideBlendTimes = null)
         {
             BlendTime = blendTime;
@@ -63,7 +51,6 @@ namespace Data.Dto
             OverrideBlendTimes = overrideBlendTimes;
         }
 
-        /// <summary>Копирующий конструктор для клонирования состояния анимации.</summary>
         public AnimationStateBase(AnimationStateBase animationState)
         {
             BlendTime = animationState.BlendTime;
@@ -79,7 +66,6 @@ namespace Data.Dto
         {
             BehaviorType = behaviorType;
         }
-        /// <summary>Тип поведения, с которым связано это состояние анимации.</summary>
         public readonly Type BehaviorType;
     }
     public class AnimationStateEnterData : AnimationStateBase
@@ -89,7 +75,6 @@ namespace Data.Dto
         {
             EnterState = enterState;
         }
-        /// <summary>Ссылка на состояние, которое реализует вход (IEnterable).</summary>
         public readonly IEnterable EnterState;
     }
 }

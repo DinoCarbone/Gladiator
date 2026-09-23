@@ -10,10 +10,6 @@ using Core.Behaviors.Interaction;
 
 namespace Core.Behaviors.Animations
 {
-    /// <summary>
-    /// Расширение <see cref="AnimationTransitionHandler"/>, которое дополнительно ретранслирует события анимаций
-    /// и регистрирует наблюдатель завершения анимации для состояний, реализующих <see cref="IExitActivator"/>.
-    /// </summary>
     public class AnimationTransitionNotifier : AnimationTransitionHandler
     {
         private IAnimationEndNotifier observerEnding;
@@ -25,9 +21,6 @@ namespace Core.Behaviors.Animations
         {
         }
 
-        /// <summary>
-        /// Инъекция фабрик и слушателя событий анимаций.
-        /// </summary>
         [Inject]
         private void Construct(IAnimationEndNotifierFactory animationEndNotifierFactory,
             IAnimationEventsNotifierFactory animationEventsNotifierFactory, IAnimationEventReceiveService animationEventListener)
@@ -63,7 +56,6 @@ namespace Core.Behaviors.Animations
             base.Unsubscribe();
         }
 
-        /// <summary>Освобождает ресурсы и отписывает наблюдателей.</summary>
         public override void Dispose()
         {
             base.Dispose();

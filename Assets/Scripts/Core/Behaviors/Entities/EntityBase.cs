@@ -11,10 +11,6 @@ using System.Linq;
 
 namespace Core.Behaviors.Entities
 {
-    /// <summary>
-    /// Базовый компонент сущности: собирает состояния и провайдеры из ScriptableObject-частей,
-    /// создаёт StateMachine и выполняет инъекцию зависимостей через <see cref="IHybridInjectService"/>.
-    /// </summary>
     public class EntityBase : MonoBehaviour
     {
         [SerializeField, Tooltip("Reference to the priority behaviors configuration.")]
@@ -30,10 +26,6 @@ namespace Core.Behaviors.Entities
         private List<Providers.IProvider> providers;
         private StateMachine stateMachine;
 
-        /// <summary>
-        /// Инжектирует сервисы и выполняет инициализацию состояний и провайдеров.
-        /// </summary>
-        /// <param name="hybridInjectService">Сервис, отвечающий за инъекции зависимостей.</param>
         [Inject]
         private void Construct(IHybridInjectService hybridInjectService)
         {
@@ -42,7 +34,6 @@ namespace Core.Behaviors.Entities
             InjectServices(hybridInjectService);
         }
 
-        /// <summary>Освобождает созданные состояния и провайдеры при уничтожении объекта.</summary>
         void OnDestroy()
         {
             if (entityStates != null)
@@ -66,9 +57,6 @@ namespace Core.Behaviors.Entities
             providers = null;
         }
 
-        /// <summary>
-        /// Создаёт список состояний на основе настроек <see cref="entityDatas"/> и инициализирует StateMachine.
-        /// </summary>
         private void InitializeStates()
         {
             entityStates = new List<IState>();
@@ -94,15 +82,11 @@ namespace Core.Behaviors.Entities
             stateMachine = new StateMachine(entityStates, defaultStates, priorityBehaviorsSO.GetPriorityTypes());
         }
 
-        /// <summary>
-        /// Создаёт провайдеры, описанные в <see cref="providersSO"/>.
-        /// </summary>
         private void InitializeProviders()
         {
             providers = new List<Providers.IProvider>();
             foreach (ProviderDataPart providerData in providersSO)
             {
-                // Собираем зависимости в том порядке, как объявлено в SO
                 object[] deps = null;
                 if (providerData.contexts != null && providerData.contexts.Count > 0)
                 {
@@ -116,10 +100,6 @@ namespace Core.Behaviors.Entities
             }
         }
 
-        /// <summary>
-        /// Подготавливает объекты для инъекции и передаёт их в <see cref="IHybridInjectService.InjectAll"/>.
-        /// </summary>
-        /// <param name="hybridInjectService">Сервис инъекции зависимостей.</param>
         private void InjectServices(IHybridInjectService hybridInjectService)
         {
             List<object> statesAsObjects = new List<object>(entityStates);
@@ -134,7 +114,6 @@ namespace Core.Behaviors.Entities
             hybridInjectService.InjectAll(statesAsObjects);
         }
 
-        /// <summary>Вызван каждый кадр — проксирует обновление в StateMachine.</summary>
         void Update()
         {
             stateMachine.Update();

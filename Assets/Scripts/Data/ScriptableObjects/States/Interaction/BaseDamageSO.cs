@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace Data.ScriptableObjects.States.Interaction
 {
-    /// <summary>
-    /// Используется только для прокидывания в списки несовместимых состояний.
-    /// </summary>
     [CreateAssetMenu(fileName = "_BaseDamage",
     menuName = "ScriptableObjects/States/Base/BaseDamage")]
     public class BaseDamageSO : BaseBehaviorSO

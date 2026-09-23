@@ -17,24 +17,18 @@ namespace Core.Behaviors.States.Interaction
     {
         private IDamageProvider damageProvider;
 
-        /// <summary>Создаёт пустое поведение урона с набором несовместимых состояний.</summary>
         public EmptyDamage(List<Type> incompatibleStates) : base(incompatibleStates)
         {
         }
 
-        /// <summary>Флаг — можно ли войти в состояние.</summary>
         public bool CanEnter { get; private set; }
 
-        /// <summary>Флаг — можно ли выйти из состояния.</summary>
         public bool CanExit { get; private set; }
 
-        /// <summary>Событие входа в состояние.</summary>
         public event Action OnEnter;
 
-        /// <summary>Событие выхода из состояния.</summary>
         public event Action OnExit;
 
-        /// <summary>Внедрение зависимостей через Zenject: получает провайдера урона и подписывается.</summary>
         [Inject]
         private void Construct(IDamageProvider damageProvider)
         {
@@ -42,14 +36,12 @@ namespace Core.Behaviors.States.Interaction
             Subscribe();
         }
 
-        /// <summary>Выполняется при входе в состояние.</summary>
         public void Enter()
         {
             CanEnter = false;
             OnEnter?.Invoke();
         }
 
-        /// <summary>Выполняется при выходе из состояния.</summary>
         public void Exit()
         {
             CanExit = false;
@@ -66,7 +58,6 @@ namespace Core.Behaviors.States.Interaction
             damageProvider.OnTakeDamage -= OnReceiveDamage;
         }
 
-        /// <summary>Убирает подписки и освобождает ссылки.</summary>
         public void Dispose()
         {
             Unsubscribe();
@@ -78,7 +69,6 @@ namespace Core.Behaviors.States.Interaction
             CanEnter = true;
         }
 
-        /// <summary>Активирует возможность выхода из состояния.</summary>
         public void ActivateExit()
         {
             CanExit = true;

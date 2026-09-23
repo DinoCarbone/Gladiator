@@ -5,7 +5,7 @@ using Utils;
 
 namespace Data.ScriptableObjects.Providers.Animation
 {
-    [CreateAssetMenu(fileName = "OverrideAnimationProvider", 
+    [CreateAssetMenu(fileName = "OverrideAnimationProvider",
     menuName = "ScriptableObjects/Providers/Animations/OverrideAnimationProvider")]
     public class OverrideAnimationProviderSO : AnimationProviderSOBase
     {
@@ -14,13 +14,8 @@ namespace Data.ScriptableObjects.Providers.Animation
 
         [SerializeField, Tooltip("List of animation clip overrides for specific states.")]
         private List<AnimationSerializeClipData> clipDatas;
-        /// <summary>
-        /// Возвращает список состояний анимации с заменёнными клипами из `clipDatas`.
-        /// Если для состояния не найден override, используется базовая конфигурация.
-        /// </summary>
         public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()
         {
-            // Получаем базовые состояния из оригинального провайдера
             List<AnimationStateTypeData> baseStates = animationProviderSO.GetAnimationStateTypeDatas();
             List<AnimationStateTypeData> result = new List<AnimationStateTypeData>();
 

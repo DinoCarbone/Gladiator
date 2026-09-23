@@ -9,9 +9,6 @@ using Unity.Cinemachine;
 
 namespace Core.Services.DI
 {
-    /// <summary>
-    /// Сцено-зависимый инсталлер — бинды, привязанные к объектам и ресурсам текущей сцены.
-    /// </summary>
     public class SceneServicesInstaller : MonoInstaller
     {
         [Header("Scene References")]

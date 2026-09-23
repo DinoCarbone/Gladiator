@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace Core.Services.States
 {
-    /// <summary>
-    /// Реализация машины состояний с приоритетами, отложенными изменениями и кешированием несовместимостей.
-    /// </summary>
     public class StateMachine : StateMachineBase
     {
         private List<StateWithType> statesToAdd = new List<StateWithType>();
@@ -14,16 +11,9 @@ namespace Core.Services.States
         private bool isProcessing = false;
         private HashSet<StateWithType> exitingStates = new HashSet<StateWithType>();
 
-        // Чтобы не создавать новые списки и не засорять GC
         private List<StateWithType> cachedTempList = new List<StateWithType>();
         private Dictionary<Type, IReadOnlyList<Type>> incompatibleTypesCache = new Dictionary<Type, IReadOnlyList<Type>>();
 
-        /// <summary>
-        /// Создаёт машину состояний.
-        /// </summary>
-        /// <param name="initialStateList">Список начальных состояний.</param>
-        /// <param name="idleStateList">Список idle-состояний.</param>
-        /// <param name="priorities">Словарь приоритетов по типу состояния.</param>
         public StateMachine(
             List<IState> initialStateList,
             List<IState> idleStateList,
@@ -32,10 +22,6 @@ namespace Core.Services.States
         {
         }
 
-        /// <summary>
-        /// Основной цикл машины состояний: обрабатывает выходы, обновляет активные состояния,
-        /// проверяет входы и применяет отложенные изменения.
-        /// </summary>
         public override void Update()
         {
             if (isProcessing) return;
@@ -108,10 +94,8 @@ namespace Core.Services.States
                 cachedTempList.Add(state);
             }
 
-            // Сортируем по приоритету (высший по списку первый)
             cachedTempList.Sort((a, b) => GetPriority(a).CompareTo(GetPriority(b)));
 
-            // Обрабатываем кандидатов
             for (int i = 0; i < cachedTempList.Count; i++)
             {
                 var state = cachedTempList[i];
@@ -131,12 +115,10 @@ namespace Core.Services.States
             int newStatePriority = GetPriority(newState);
             var newStateIncompatible = GetCachedIncompatibleTypes(newState);
 
-            // Проверяем текущие состояния (которые не будут удалены)
             for (int i = 0; i < currentStates.Count; i++)
             {
                 var activeState = currentStates[i];
 
-                // Пропускаем состояния, которые будут удалены
                 if (statesToRemove.Contains(activeState))
                     continue;
 
@@ -172,7 +154,6 @@ namespace Core.Services.States
         {
             var existingCachedData = stateCachedData[existingState.Type];
 
-            // 1. Проверяем, несовместимо ли новое состояние с существующим
             for (int i = 0; i < newStateIncompatible.Count; i++)
             {
                 if (existingCachedData.AllAssignableTypes.Contains(newStateIncompatible[i]))
@@ -181,10 +162,9 @@ namespace Core.Services.States
                 }
             }
 
-            // 2. Проверяем, несовместимо ли существующее состояние с новым
             var existingIncompatible = GetCachedIncompatibleTypes(existingState);
             var newCachedData = stateCachedData[newState.Type];
-            
+
             for (int i = 0; i < existingIncompatible.Count; i++)
             {
                 if (newCachedData.AllAssignableTypes.Contains(existingIncompatible[i]))
@@ -193,20 +173,18 @@ namespace Core.Services.States
                 }
             }
 
-            return false; // Конфликта нет
+            return false;
         }
 
         private bool HandleConflict(StateWithType conflictingState, StateWithType newState, int newStatePriority)
         {
             int conflictingPriority = GetPriority(conflictingState);
 
-            // Существующее состояние имеет ВЫСШИЙ приоритет - новый не может быть добавлен
             if (conflictingPriority < newStatePriority)
             {
-                return true; // Есть конфликт, который нельзя разрешить
+                return true;
             }
 
-            // Существующее состояние имеет НИЖНИЙ или РАВНЫЙ приоритет - вытесняем его
             if (!exitingStates.Contains(conflictingState) && !statesToRemove.Contains(conflictingState))
             {
                 exitingStates.Add(conflictingState);
@@ -217,7 +195,7 @@ namespace Core.Services.States
                 }
             }
 
-            return false; // Конфликт разрешен (состояние будет вытеснено)
+            return false;
         }
 
         private void EnsureActiveStates()
@@ -242,7 +220,6 @@ namespace Core.Services.States
                 }
             }
 
-            // Если не останется активных состояний - добавляем idle
             if (cachedTempList.Count == 0)
             {
                 for (int i = 0; i < idleStates.Count; i++)

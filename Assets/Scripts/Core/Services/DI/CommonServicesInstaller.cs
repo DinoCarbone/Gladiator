@@ -7,10 +7,6 @@ using Zenject;
 
 namespace Core.Services.DI
 {
-    /// <summary>
-    /// Инсталлер общих (сквозных) сервисов. Здесь находятся синглтон-сервисы
-    /// и фабрики, не зависящие от конкретной сцены или префабов.
-    /// </summary>
     public class CommonServicesInstaller : MonoInstaller
     {
         public override void InstallBindings()

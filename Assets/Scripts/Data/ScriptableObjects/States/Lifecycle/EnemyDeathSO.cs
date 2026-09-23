@@ -13,7 +13,6 @@ namespace Data.ScriptableObjects.States.Lifecycle
     {
         [SerializeField, Tooltip("Points awarded for killing this enemy.")]
         private int costKillable = 1;
-        /// <summary>Создаёт конфигурацию смерти врага с указанием стоимости и core GameObject.</summary>
         public override IState CreateConfigState(params object[] dependencies)
         {
            GameObject coreGameObject = null;
@@ -27,15 +26,14 @@ namespace Data.ScriptableObjects.States.Lifecycle
             return new DefautDeath(GetIncompatibleTypes(), enemyKillable);
         }
 
-        /// <summary>Базовый тип поведения для состояний смерти.</summary>
         public override Type GetBaseBehaviorType()
         {
             return typeof(BaseDeath);
         }
-        
+
         public override ContextRequirement[] GetContextRequirements()
         {
-            return 
+            return
             new ContextRequirement[]
             {
                 new ContextRequirement

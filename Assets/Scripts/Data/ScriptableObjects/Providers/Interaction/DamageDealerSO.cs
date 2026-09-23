@@ -21,7 +21,6 @@ namespace Data.ScriptableObjects.Providers.Interaction
         [SerializeField, Tooltip("Animation event to trigger when dealing damage.")]
         private AnimationEventSO animationEvent;
 
-        /// <summary>Создаёт провайдер `DamageDealer` с заданными параметрами.</summary>
         public override IProvider CreateProvider(params object[] _)
         {
             return new DamageDealer(animationEvent, damage, distance, radius);

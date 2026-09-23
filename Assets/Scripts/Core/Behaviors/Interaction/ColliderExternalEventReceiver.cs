@@ -15,12 +15,8 @@ namespace Core.Behaviors.Interaction
             this.internalEventReceiverService = Extensions.AssignWithNullCheck(internalEventReceiverService);
         }
 
-        /// <summary>
-        /// Перенаправляет полученное внешнее событие в локальный сервис получения внутренних событий.
-        /// </summary>
         public void ReceiveEvent(IEvent @event)
         {
-            // Debug.Log($"ColliderExternalEventReceiver received event: {@event.GetType().Name}");
             internalEventReceiverService.ReceiveEvent(@event);
         }
     }

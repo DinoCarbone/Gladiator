@@ -8,10 +8,6 @@ using Core.Services.States;
 
 namespace Core.Behaviors.Animations
 {
-    /// <summary>
-    /// Обрабатывает переходы состояний и запускает соответствующие анимации через <see cref="IAnimationPlayService"/>.
-    /// Подписывается на события входа состояний и проигрывает анимационные клипы с учётом blend time.
-    /// </summary>
     public class AnimationTransitionHandler : Providers.IProvider, IDisposable
     {
         private List<AnimationStateTypeData> templateStates = new List<AnimationStateTypeData>();
@@ -20,22 +16,12 @@ namespace Core.Behaviors.Animations
         private readonly Dictionary<AnimationStateEnterData, Action> enterHandlers = new();
         protected readonly Animator animator;
 
-        /// <summary>
-        /// Создаёт обработчик переходов анимаций для указанного <see cref="Animator"/>.
-        /// </summary>
-        /// <param name="animator">Animator, используемый для проигрывания клипов.</param>
-        /// <param name="templateAnimationStates">Шаблоны состояний анимаций для сопоставления с поведениями.</param>
         public AnimationTransitionHandler(Animator animator, List<AnimationStateTypeData> templateAnimationStates)
         {
             this.animator = Extensions.AssignWithNullCheck(animator);
             this.templateStates = Extensions.AssignWithNullCheck(templateAnimationStates);
         }
 
-        /// <summary>
-        /// Инъекция зависимостей: создаёт сервис проигрывания анимаций и инициализирует состояния.
-        /// </summary>
-        /// <param name="animationStates">Данные состояний для создания подписок.</param>
-        /// <param name="animationServicesFactory">Фабрика сервиса проигрывания анимаций.</param>
         [Inject]
         public void Construct(StateListData animationStates, IAnimationPlayServiceFactory animationServicesFactory)
         {
@@ -44,10 +30,6 @@ namespace Core.Behaviors.Animations
             Subscribe();
         }
 
-        /// <summary>
-        /// Создаёт внутренние данные состояний и собирает обработчики входа для тех состояний, которые реализуют <see cref="IEnterable"/>.
-        /// </summary>
-        /// <param name="states">Список состояний для обработки.</param>
         private void CreateAnimationStates(IReadOnlyList<IState> states)
         {
             this.states.Clear();
@@ -80,9 +62,6 @@ namespace Core.Behaviors.Animations
             }
         }
 
-        /// <summary>
-        /// Подписывается на события входа состояний, сохраняет делегаты для последующей отписки.
-        /// </summary>
         protected virtual void Subscribe()
         {
             foreach (var state in states)
@@ -93,9 +72,6 @@ namespace Core.Behaviors.Animations
             }
         }
 
-        /// <summary>
-        /// Отписывается от ранее зарегистрированных обработчиков входа состояний.
-        /// </summary>
         protected virtual void Unsubscribe()
         {
             foreach (var kvp in enterHandlers)
@@ -108,11 +84,7 @@ namespace Core.Behaviors.Animations
 
             enterHandlers.Clear();
         }
-        
-        /// <summary>
-        /// Вызывается при входе состояния; вычисляет корректный <c>blendTime</c> и запускает анимацию.
-        /// </summary>
-        /// <param name="enterData">Данные состояния анимации.</param>
+
         protected virtual void OnEnterState(AnimationStateEnterData enterData)
         {
             float blendTime = enterData.BlendTime;
@@ -127,9 +99,6 @@ namespace Core.Behaviors.Animations
             animatorService.Play(enterData.StateName, enterData.Clip, blendTime);
         }
 
-        /// <summary>
-        /// Освобождает ресурсы — отписывается от событий и очищает внутренние коллекции.
-        /// </summary>
         public virtual void Dispose()
         {
             Unsubscribe();

@@ -13,7 +13,6 @@ namespace Data.ScriptableObjects.Providers.Animation
         [SerializeField, Tooltip("Serialized animation state to behavior mappings.")]
         private List<AnimationSerializeTypeData> animationSerializeTypeDatas;
 
-        /// <summary>Возвращает конфигурацию состояний анимации на основе сериализованных данных.</summary>
         public override List<AnimationStateTypeData> GetAnimationStateTypeDatas()
         {
             List<AnimationStateTypeData> stateTypeDatas = new List<AnimationStateTypeData>();
@@ -29,7 +28,7 @@ namespace Data.ScriptableObjects.Providers.Animation
                     Debug.LogError("BehaviorTypeSO is null");
                     continue;
                 }
-                
+
                 stateTypeDatas.Add(new AnimationStateTypeData(data.animationStateSO.StateName, null,
                  data.behaviorTypeSO.GetBaseBehaviorType(), data.baseBlendTime,
                   Extensions.GetOverrideBlendTimes(data.overrideBlendTimeDatas)));
@@ -37,7 +36,6 @@ namespace Data.ScriptableObjects.Providers.Animation
             return stateTypeDatas;
         }
 
-        /// <summary>Возвращает ScriptableObject состояния по имени или null, если не найдено.</summary>
         internal AnimationStateSO GetAnimationStateSO(string stateName)
         {
             foreach (AnimationSerializeTypeData data in animationSerializeTypeDatas)

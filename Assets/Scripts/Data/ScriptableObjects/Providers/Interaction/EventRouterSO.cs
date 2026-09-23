@@ -10,7 +10,6 @@ namespace Data.ScriptableObjects.Providers.Interaction
     {
         public override IProvider CreateProvider(params object[] dependencies)
         {
-            /// <summary>Создаёт маршрутизатор событий (EventRouter) для взаимодействий.</summary>
             return new EventRouter();
         }
     }
